@@ -1,0 +1,21 @@
+{
+  "name": "game",
+  "version": "1.0.0",
+  "description": "game",
+  "main": "index.js",
+  "scripts": {
+    "test": "test"
+  },
+  "repository": {
+    "type": "git",
+    "url": ".."
+  },
+  "author": "oliver.ross@hotmail.com",
+  "license": "ISC",
+  "devDependencies": {
+    "husky": "^2.4.1",
+    "jest": "^24.8.0",
+    "lerna": "^3.15.0",
+    "prettier": "^1.18.2"
+  }
+}
