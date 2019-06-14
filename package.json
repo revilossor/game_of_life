@@ -4,11 +4,14 @@
   "description": "game",
   "main": "index.js",
   "scripts": {
-    "test": "test"
+    "unit": "jest",
+    "lint": "prettier --check \"**/*.js\"",
+    "test": "npm run lint && npm run unit",
+    "watch": "jest --watch"
   },
   "repository": {
     "type": "git",
-    "url": ".."
+    "url": "https://github.com/revilossor/game.git"
   },
   "author": "oliver.ross@hotmail.com",
   "license": "ISC",
@@ -16,6 +19,19 @@
     "husky": "^2.4.1",
     "jest": "^24.8.0",
     "lerna": "^3.15.0",
+    "lint-staged": "^8.2.1",
     "prettier": "^1.18.2"
+  },
+  "husky": {
+    "hooks": {
+      "pre-push": "npm test",
+      "pre-commit": "lint-staged"
+    }
+  },
+  "lint-staged": {
+    "*.{js,css,json,md}": [
+      "prettier --write",
+      "git add"
+    ]
   }
 }
