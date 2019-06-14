@@ -5,6 +5,7 @@ interface Point {
 
 export default class Level {
   private player: Point = { x: 0, y: 0 };
+
   private poo: string;
 
   public constructor(poo: string) {
