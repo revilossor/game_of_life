@@ -1,5 +1,5 @@
 {
-  "name": "game",
+  "name": "revilossor-game",
   "version": "1.0.0",
   "description": "game",
   "main": "index.js",
@@ -9,7 +9,7 @@
     "test": "npm run lint && npm run unit",
     "watch": "jest --watch",
     "postinstall": "npm run tsconfig && lerna bootstrap --hoist",
-    "tsconfig": "lerna exec \"ln -s ../../tsconfig.json ./tsconfig.json\"",
+    "tsconfig": "lerna exec \"ln -sf ../../tsconfig.json ./tsconfig.json\"",
     "compile": "lerna run compile --stream --parallel",
     "clean": "lerna exec \"rm -rf node_modules && rm -rf dist && rm -f tsconfig.json\" && rm -rf node_modules"
   },
