@@ -1,0 +1,32 @@
+{
+  "name": "tilemap",
+  "version": "0.0.0",
+  "description": "> TODO: description",
+  "author": "Oliver Ross <oliver.ross01@bbc.co.uk>",
+  "homepage": "https://github.com/revilossor/game#readme",
+  "license": "ISC",
+  "module": "src/index.ts",
+  "main": "dist/index.js",
+  "typings": "dist/index.d.ts",
+  "directories": {
+    "lib": "lib",
+    "test": "__tests__"
+  },
+  "files": [
+    "lib"
+  ],
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/revilossor/game.git"
+  },
+  "scripts": {
+    "prepare": "tsc",
+    "compile": "tsc"
+  },
+  "bugs": {
+    "url": "https://github.com/revilossor/game/issues"
+  },
+  "devDependencies": {
+    "typescript": "^3.5.2"
+  }
+}

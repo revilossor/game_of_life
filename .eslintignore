@@ -1,5 +1,7 @@
 package.json
 package-lock.json
+README.md
 tsconfig.json
 **/dist/*
 **/node_modules/*
+**/tsconfig.json
