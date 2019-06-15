@@ -8,7 +8,6 @@
     "lint": "eslint --ext .js,.ts,.json packages",
     "test": "npm run lint && npm run unit",
     "watch": "jest --watch",
-    "preinstall": "npm run clean",
     "postinstall": "npm run tsconfig && lerna bootstrap --hoist",
     "tsconfig": "lerna exec \"ln -s ../../tsconfig.json ./tsconfig.json\"",
     "compile": "lerna run compile --stream --parallel",
