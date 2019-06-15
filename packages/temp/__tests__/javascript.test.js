@@ -1,4 +1,4 @@
-const Level = require("../lib/Level").default;
+const Level = require("../src/Level").default;
 
 beforeAll(() => {
   console.dir = jest.fn(); // eslint-disable-line no-console

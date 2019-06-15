@@ -1,2 +1,4 @@
 node_modules
 *.log
+packages/**/tsconfig.json
+**/dist

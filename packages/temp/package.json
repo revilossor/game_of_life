@@ -5,7 +5,9 @@
   "author": "Oliver Ross <oliver.ross01@bbc.co.uk>",
   "homepage": "https://github.com/revilossor/game#readme",
   "license": "ISC",
-  "main": "lib/temp.js",
+  "module": "src/index.ts",
+  "main": "dist/index.js",
+  "typings": "dist/index.d.ts",
   "directories": {
     "lib": "lib",
     "test": "__tests__"
@@ -18,9 +20,13 @@
     "url": "git+https://github.com/revilossor/game.git"
   },
   "scripts": {
-    "test": "echo \"Error: run tests from root\" && exit 1"
+    "prepare": "tsc",
+    "compile": "tsc"
   },
   "bugs": {
     "url": "https://github.com/revilossor/game/issues"
+  },
+  "devDependencies": {
+    "typescript": "^3.5.2"
   }
 }
