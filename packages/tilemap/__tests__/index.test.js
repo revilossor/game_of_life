@@ -1,5 +1,7 @@
-describe("tilemap", () => {
-  it("needs tests", () => {
-    expect(true).toBe(true);
+const { Tilemap } = require("../src/index");
+
+describe("Tilemap", () => {
+  it("expxorts a constructor", () => {
+    expect(new Tilemap()).toBeInstanceOf(Tilemap);
   });
 });

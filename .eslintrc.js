@@ -9,7 +9,9 @@ module.exports = {
   ],
   plugins: ["jest", "@typescript-eslint"],
   rules: {
-    indent: ["error", 2]
+    indent: ["error", 2],
+    "import/prefer-default-export": "off",
+    "@typescript-eslint/no-var-requires": "off"
   },
   env: {
     "jest/globals": true,

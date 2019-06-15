@@ -50,6 +50,10 @@
     ]
   },
   "jest": {
-    "verbose": true
+    "verbose": true,
+    "transform": {
+      "^.+\\.jsx?$": "babel-jest",
+      "^.+\\.tsx?$": "ts-jest"
+    }
   }
 }
