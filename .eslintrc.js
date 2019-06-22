@@ -11,7 +11,10 @@ module.exports = {
   rules: {
     indent: ["error", 2],
     "import/prefer-default-export": "off",
-    "@typescript-eslint/no-var-requires": "off"
+    "@typescript-eslint/no-var-requires": "off",
+    "class-methods-use-this": "off",
+    "no-undef": "off",
+    "no-console": "off"
   },
   env: {
     "jest/globals": true,

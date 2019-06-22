@@ -11,7 +11,7 @@ interface HashMap<K, T> {
 export default class PointMap<T> implements HashMap<Point, T> {
   public items: { [hash: string]: T } = {};
 
-  get length(): number {
+  public get length(): number {
     return Object.keys(this.items).length;
   }
 
