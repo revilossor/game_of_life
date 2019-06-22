@@ -21,7 +21,34 @@ export default class Tilemap<T> {
       tileset: this.tileset
     });
   }
-  // set
+
+  private validatePoint(x: number, y: number): void {
+    if (Number.isNaN(Number(x)) || x < 0 || x > this.width) {
+      throw Error(
+        `the x coordinate should be a number between 0 and ${this.width}`
+      );
+    }
+    if (Number.isNaN(Number(y)) || y < 0 || y > this.height) {
+      throw Error(
+        `the y coordinate should be a number between 0 and ${this.height}`
+      );
+    }
+  }
+
+  private validateTileIndex(index: number): void {
+    if (Number.isNaN(Number(index)) || index < 0 || index > this.tiles.length) {
+      throw Error(
+        `the tile index should be a number between 0 and ${this.tiles.length}`
+      );
+    }
+  }
+
+  public set(x: number, y: number, tileIndex: number): Tilemap<T> {
+    this.validatePoint(x, y);
+    this.validateTileIndex(tileIndex);
+    this.tiles.set({ x, y }, tileIndex);
+    return this;
+  }
   // get
   // toarray - returns 2d array of T's ( parsed )
 
