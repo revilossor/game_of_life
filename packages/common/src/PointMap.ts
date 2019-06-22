@@ -20,7 +20,7 @@ export default class PointMap<T> implements HashMap<Point, T> {
   }
 
   public get entries(): [Point, T][] {
-    return Object.entries(this.items).map(([hash, value]) => [
+    return Object.entries(this.items).map(([hash, value]): [Point, T] => [
       this.unhash(hash),
       value
     ]);

@@ -51,7 +51,7 @@ export default class Tilemap<T> {
 
   public toArray(): T | null[] {
     const array = new Array(this.width * this.height).fill(null);
-    this.tiles.entries.forEach(([{ x, y }, value]) => {
+    this.tiles.entries.forEach(([{ x, y }, value]): void => {
       array[y * this.width + x] = this.tileset[value];
     });
     return array;
