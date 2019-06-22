@@ -11,6 +11,8 @@ beforeEach(() => {
   map = new PointMap();
 });
 
+// TODO test hash / unhash
+
 describe("length", () => {
   it("starts empty", () => {
     expect(map).toHaveLength(0);
@@ -62,5 +64,16 @@ describe("get", () => {
 
   it("returns undefined if there is no item at the point", () => {
     expect(map.get({ x: 0, y: 0 })).not.toBeDefined();
+  });
+});
+
+describe("entries", () => {
+  it("returns a list of [unhashed, value] tuples", () => {
+    expect(map).toHaveLength(0);
+    const otherPoint = { ...point, y: 0 };
+    const otherValue = "the moon";
+    map.set(point, value);
+    map.set(otherPoint, otherValue);
+    expect(map.entries).toEqual([[point, value], [otherPoint, otherValue]]);
   });
 });

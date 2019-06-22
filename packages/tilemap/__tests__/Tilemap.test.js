@@ -40,46 +40,35 @@ describe("validate point", () => {
 
   it("if the x index is invalid", () => {
     error = Error(`the x coordinate should be a number between 0 and ${width}`);
-    expect(() => {
-      map.validatePoint("poo", y);
-    }).toThrow(error);
-    expect(() => {
-      map.validatePoint(x + 100, y);
-    }).toThrow(error);
-    expect(() => {
-      map.validatePoint(-x, y);
-    }).toThrow(error);
+    expect(() => map.validatePoint("poo", y)).toThrow(error);
+    expect(() => map.validatePoint(x + 100, y)).toThrow(error);
+    expect(() => map.validatePoint(-x, y)).toThrow(error);
+    expect(() => map.validatePoint(x, y)).not.toThrow(error);
+    expect(() => map.validatePoint()).toThrow(error);
   });
   it("if the y index is invalid", () => {
     error = Error(
       `the y coordinate should be a number between 0 and ${height}`
     );
-    expect(() => {
-      map.validatePoint(x, "poo");
-    }).toThrow(error);
-    expect(() => {
-      map.validatePoint(x, y + 100);
-    }).toThrow(error);
-    expect(() => {
-      map.validatePoint(x, -y);
-    }).toThrow(error);
+    expect(() => map.validatePoint(x, "poo")).toThrow(error);
+    expect(() => map.validatePoint(x, y + 100)).toThrow(error);
+    expect(() => map.validatePoint(x, -y)).toThrow(error);
+    expect(() => map.validatePoint(x, y)).not.toThrow(error);
+    expect(() => map.validatePoint(x)).toThrow(error);
   });
 });
 
 it("validate tile index", () => {
   const error = Error(
-    `the tile index should be a number between 0 and ${map.tiles.length}`
+    `the tile index should be a number between 0 and ${map.tileset.length}`
   );
 
-  expect(() => {
-    map.validateTileIndex("poo");
-  }).toThrow(error);
-  expect(() => {
-    map.validateTileIndex(100);
-  }).toThrow(error);
-  expect(() => {
-    map.validateTileIndex(-1);
-  }).toThrow(error);
+  expect(() => map.validateTileIndex("poo")).toThrow(error);
+  expect(() => map.validateTileIndex(100)).toThrow(error);
+  expect(() => map.validateTileIndex(-1)).toThrow(error);
+  expect(() => map.validateTileIndex()).toThrow(error);
+  expect(() => map.validateTileIndex(0)).not.toThrow();
+  expect(() => map.validateTileIndex(tileset.length - 1)).not.toThrow();
 });
 
 describe("set", () => {
@@ -118,9 +107,30 @@ describe("set", () => {
   });
 });
 
-// describe("to2DArray", () => {
-//   it("returns an array of the values", () => {
-//     map.set({ x: 0, y: 0 }, 0);
-//     expect(new Tilemap(width, height)).toBeInstanceOf(Tilemap);
-//   });
-// });
+describe("toArray", () => {
+  it("returns an array with an entry for each tile position", () => {
+    const result = map.toArray();
+    expect(result).toBeInstanceOf(Array);
+    expect(result).toHaveLength(width * height);
+  });
+
+  it("writes entries from the top left to the bottom right", () => {
+    expect(map.tiles).toHaveLength(0);
+    const topLeftIndex = 0;
+    const bottomRightIndex = 1;
+    map.set(0, 0, topLeftIndex);
+    map.set(width - 1, height - 1, bottomRightIndex);
+    const result = map.toArray();
+    expect(result[0]).toEqual(tileset[topLeftIndex]);
+    expect(result[result.length - 1]).toEqual(tileset[bottomRightIndex]);
+  });
+
+  it("fills in empty positions with null", () => {
+    expect(map.tiles).toHaveLength(0);
+    map.set(0, 0, 0);
+    map.set(width - 1, height - 1, 1);
+    const result = map.toArray();
+    expect(result[1]).toBeNull();
+    expect(result[2]).toBeNull();
+  });
+});

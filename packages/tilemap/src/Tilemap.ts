@@ -14,14 +14,9 @@ export default class Tilemap<T> {
     this.height = height;
     this.tiles = new PointMap<number>();
     this.tileset = tileset;
-    console.dir({
-      tiles: JSON.stringify(this.tiles.items),
-      width: this.width,
-      height: this.height,
-      tileset: this.tileset
-    });
   }
 
+  // TODO dry here...
   private validatePoint(x: number, y: number): void {
     if (Number.isNaN(Number(x)) || x < 0 || x > this.width) {
       throw Error(
@@ -36,9 +31,13 @@ export default class Tilemap<T> {
   }
 
   private validateTileIndex(index: number): void {
-    if (Number.isNaN(Number(index)) || index < 0 || index > this.tiles.length) {
+    if (
+      Number.isNaN(Number(index)) ||
+      index < 0 ||
+      index > this.tileset.length
+    ) {
       throw Error(
-        `the tile index should be a number between 0 and ${this.tiles.length}`
+        `the tile index should be a number between 0 and ${this.tileset.length}`
       );
     }
   }
@@ -49,12 +48,22 @@ export default class Tilemap<T> {
     this.tiles.set({ x, y }, tileIndex);
     return this;
   }
-  // get
-  // toarray - returns 2d array of T's ( parsed )
+
+  public toArray(): T | null[] {
+    const array = new Array(this.width * this.height).fill(null);
+    this.tiles.entries.forEach(([{ x, y }, value]) => {
+      array[y * this.width + x] = this.tileset[value];
+    });
+    return array;
+  }
+
+  // toarray - returns 2d array of instances
+  //  pass x, y, width, height for sub grid
 
   // tostring - serializable interface, T is serializable
-  // some bitwise way of referring to neighbours
+  //  calls serialive on every instance
   // get neighbours
+  //  some bitwise way of referring to neighbours
   // noise
   // doCellularAutomata(born, survive, generations=1) - how to handle tilesets?
 

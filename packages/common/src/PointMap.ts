@@ -4,8 +4,12 @@ interface HashMap<K, T> {
   items: {
     [hash: string]: T;
   };
+  hash: (item: K) => string;
+  unhash: (hash: string) => K;
   get: (unhashed: K) => T;
   set: (unhashed: K, item: T) => T;
+  length: number;
+  entries: [K, T][];
 }
 
 export default class PointMap<T> implements HashMap<Point, T> {
@@ -15,8 +19,19 @@ export default class PointMap<T> implements HashMap<Point, T> {
     return Object.keys(this.items).length;
   }
 
-  private hash(point: Point): string {
-    return JSON.stringify(point);
+  public get entries(): [Point, T][] {
+    return Object.entries(this.items).map(([hash, value]) => [
+      this.unhash(hash),
+      value
+    ]);
+  }
+
+  public hash(item: Point): string {
+    return JSON.stringify(item);
+  }
+
+  public unhash(hash: string): Point {
+    return JSON.parse(hash);
   }
 
   public get(unhashed: Point): T {
