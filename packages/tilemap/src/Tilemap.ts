@@ -5,9 +5,9 @@ export default class Tilemap<T> {
 
   private tiles: PointMap<number>;
 
-  private width: number;
+  public width: number;
 
-  private height: number;
+  public height: number;
 
   public constructor(width: number, height: number, tileset: T[]) {
     this.width = width;
@@ -16,30 +16,23 @@ export default class Tilemap<T> {
     this.tileset = tileset;
   }
 
-  // TODO dry here...
-  private validatePoint(x: number, y: number): void {
-    if (Number.isNaN(Number(x)) || x < 0 || x > this.width) {
-      throw Error(
-        `the x coordinate should be a number between 0 and ${this.width}`
-      );
-    }
-    if (Number.isNaN(Number(y)) || y < 0 || y > this.height) {
-      throw Error(
-        `the y coordinate should be a number between 0 and ${this.height}`
-      );
+  protected validateNumericField(
+    value: number,
+    max: number,
+    field: string
+  ): void {
+    if (Number.isNaN(Number(value)) || value < 0 || value > max) {
+      throw Error(`the ${field} should be a number between 0 and ${max}`);
     }
   }
 
-  private validateTileIndex(index: number): void {
-    if (
-      Number.isNaN(Number(index)) ||
-      index < 0 ||
-      index > this.tileset.length
-    ) {
-      throw Error(
-        `the tile index should be a number between 0 and ${this.tileset.length}`
-      );
-    }
+  protected validatePoint(x: number, y: number): void {
+    this.validateNumericField(x, this.width, "x coordinate");
+    this.validateNumericField(y, this.height, "y coordinate");
+  }
+
+  protected validateTileIndex(index: number): void {
+    this.validateNumericField(index, this.tileset.length, "tile index");
   }
 
   public set(x: number, y: number, tileIndex: number): Tilemap<T> {
@@ -65,16 +58,4 @@ export default class Tilemap<T> {
     }
     return result;
   }
-
-  // toarray - returns 2d array of instances
-  //  pass x, y, width, height for sub grid
-
-  // tostring - serializable interface, T is serializable
-  //  calls serialive on every instance
-  // get neighbours
-  //  some bitwise way of referring to neighbours
-  // noise
-  // doCellularAutomata(born, survive, generations=1) - how to handle tilesets?
-
-  // cellular automata as decorator class? takes a tilemap,
 }
