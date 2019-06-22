@@ -1,30 +1,30 @@
 import Point from "./Point";
 
-interface GenericPointMap<T> {
+interface HashMap<K, T> {
   items: {
     [hash: string]: T;
   };
-  get: (point: Point) => T;
-  set: (point: Point, item: T) => T;
+  get: (unhashed: K) => T;
+  set: (unhashed: K, item: T) => T;
 }
 
-export default class PointMap<T> implements GenericPointMap<T> {
+export default class PointMap<T> implements HashMap<Point, T> {
   public items: { [hash: string]: T } = {};
-
-  private hash(point: Point): string {
-    return JSON.stringify(point);
-  }
 
   get length(): number {
     return Object.keys(this.items).length;
   }
 
-  public get(point: Point): T {
-    return this.items[this.hash(point)];
+  private hash(point: Point): string {
+    return JSON.stringify(point);
   }
 
-  public set(point: Point, value: T): T {
-    this.items[this.hash(point)] = value;
+  public get(unhashed: Point): T {
+    return this.items[this.hash(unhashed)];
+  }
+
+  public set(unhashed: Point, value: T): T {
+    this.items[this.hash(unhashed)] = value;
     return value;
   }
 }
