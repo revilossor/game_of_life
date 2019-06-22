@@ -49,12 +49,21 @@ export default class Tilemap<T> {
     return this;
   }
 
-  public toArray(): T | null[] {
+  public toArray(): (T | null)[] {
     const array = new Array(this.width * this.height).fill(null);
     this.tiles.entries.forEach(([{ x, y }, value]): void => {
       array[y * this.width + x] = this.tileset[value];
     });
     return array;
+  }
+
+  public to2DArray(): (T | null)[][] {
+    const array: (T | null)[] = this.toArray();
+    const result: (T | null)[][] = [];
+    while (array.length > 0) {
+      result.push(array.splice(0, this.width));
+    }
+    return result;
   }
 
   // toarray - returns 2d array of instances

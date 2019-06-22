@@ -108,29 +108,61 @@ describe("set", () => {
 });
 
 describe("toArray", () => {
+  let result;
+
+  const topLeftIndex = 0;
+  const bottomRightIndex = 1;
+
+  beforeEach(() => {
+    map.set(0, 0, topLeftIndex);
+    map.set(width - 1, height - 1, bottomRightIndex);
+    result = map.toArray();
+  });
+
   it("returns an array with an entry for each tile position", () => {
-    const result = map.toArray();
     expect(result).toBeInstanceOf(Array);
     expect(result).toHaveLength(width * height);
   });
 
   it("writes entries from the top left to the bottom right", () => {
-    expect(map.tiles).toHaveLength(0);
-    const topLeftIndex = 0;
-    const bottomRightIndex = 1;
-    map.set(0, 0, topLeftIndex);
-    map.set(width - 1, height - 1, bottomRightIndex);
-    const result = map.toArray();
     expect(result[0]).toEqual(tileset[topLeftIndex]);
     expect(result[result.length - 1]).toEqual(tileset[bottomRightIndex]);
   });
 
   it("fills in empty positions with null", () => {
-    expect(map.tiles).toHaveLength(0);
-    map.set(0, 0, 0);
-    map.set(width - 1, height - 1, 1);
-    const result = map.toArray();
     expect(result[1]).toBeNull();
     expect(result[2]).toBeNull();
+  });
+});
+
+describe("to2DArray", () => {
+  let result;
+
+  const topRightIndex = 1;
+  const bottomLeftIndex = 0;
+
+  beforeEach(() => {
+    map.set(width - 1, 0, topRightIndex);
+    map.set(0, height - 1, bottomLeftIndex);
+    result = map.to2DArray();
+  });
+
+  it("returns an array with an entry for each tile position", () => {
+    expect(result).toBeInstanceOf(Array);
+    expect(result).toHaveLength(height);
+    result.forEach(item => {
+      expect(item).toBeInstanceOf(Array);
+      expect(item).toHaveLength(width);
+    });
+  });
+
+  it("writes entries from the top left to the bottom right", () => {
+    expect(result[0][1]).toEqual(tileset[topRightIndex]);
+    expect(result[1][0]).toEqual(tileset[bottomLeftIndex]);
+  });
+
+  it("fills in empty positions with null", () => {
+    expect(result[0][0]).toBeNull();
+    expect(result[1][1]).toBeNull();
   });
 });
