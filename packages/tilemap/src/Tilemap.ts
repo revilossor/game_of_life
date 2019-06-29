@@ -3,7 +3,7 @@ import { PointMap } from "revilossor-game-common";
 export default class Tilemap<T> {
   private tileset: T[];
 
-  private tiles: PointMap<number>;
+  protected tiles: PointMap<number>;
 
   public width: number;
 
@@ -35,6 +35,15 @@ export default class Tilemap<T> {
     this.validateNumericField(index, this.tileset.length, "tile index");
   }
 
+  protected validateDimensions(): void {
+    if (
+      typeof this.width === "undefined" ||
+      typeof this.height === "undefined"
+    ) {
+      throw Error("expected width and height");
+    }
+  }
+
   public set(x: number, y: number, tileIndex: number): Tilemap<T> {
     this.validatePoint(x, y);
     this.validateTileIndex(tileIndex);
@@ -48,6 +57,14 @@ export default class Tilemap<T> {
       array[y * this.width + x] = this.tileset[value];
     });
     return array;
+  }
+
+  public fromArray(src: (T | null)[]): Tilemap<T> {
+    this.validateDimensions();
+    if (typeof src === "undefined") {
+      throw Error("expected source array");
+    }
+    return this;
   }
 
   public to2DArray(): (T | null)[][] {

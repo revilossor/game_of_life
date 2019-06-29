@@ -4,14 +4,14 @@ const Tilemap = require("../src/Tilemap").default;
 
 const width = 2;
 const height = 2;
+const tileset = ["dead", "alive"];
 
 const x = 1;
 const y = 2;
+
 const value = 0;
 
 let map;
-
-const tileset = ["dead", "alive"];
 
 beforeEach(() => {
   map = new Tilemap(width, height, tileset);
@@ -29,6 +29,7 @@ describe("constructor", () => {
       expect(map.tileset).toBe(tileset);
     });
   });
+
   it("initialises an empty level", () => {
     const emptyPointMap = new PointMap();
     expect(map.tiles).toEqual(emptyPointMap);
@@ -38,37 +39,55 @@ describe("constructor", () => {
 describe("validate point", () => {
   let error;
 
-  it("if the x index is invalid", () => {
+  it("throws if the x index is invalid", () => {
     error = Error(`the x coordinate should be a number between 0 and ${width}`);
     expect(() => map.validatePoint("poo", y)).toThrow(error);
     expect(() => map.validatePoint(x + 100, y)).toThrow(error);
     expect(() => map.validatePoint(-x, y)).toThrow(error);
-    expect(() => map.validatePoint(x, y)).not.toThrow(error);
     expect(() => map.validatePoint()).toThrow(error);
   });
-  it("if the y index is invalid", () => {
+
+  it("throws if the y index is invalid", () => {
     error = Error(
       `the y coordinate should be a number between 0 and ${height}`
     );
     expect(() => map.validatePoint(x, "poo")).toThrow(error);
     expect(() => map.validatePoint(x, y + 100)).toThrow(error);
     expect(() => map.validatePoint(x, -y)).toThrow(error);
-    expect(() => map.validatePoint(x, y)).not.toThrow(error);
     expect(() => map.validatePoint(x)).toThrow(error);
+  });
+
+  it("doesnt throw if the coordinates are valid", () => {
+    expect(() => map.validatePoint(x, y)).not.toThrow(error);
   });
 });
 
-it("validate tile index", () => {
+describe("validate tile index", () => {
   const error = Error(
-    `the tile index should be a number between 0 and ${map.tileset.length}`
+    `the tile index should be a number between 0 and ${tileset.length}`
   );
 
-  expect(() => map.validateTileIndex("poo")).toThrow(error);
-  expect(() => map.validateTileIndex(100)).toThrow(error);
-  expect(() => map.validateTileIndex(-1)).toThrow(error);
-  expect(() => map.validateTileIndex()).toThrow(error);
-  expect(() => map.validateTileIndex(0)).not.toThrow();
-  expect(() => map.validateTileIndex(tileset.length - 1)).not.toThrow();
+  it("throws if the index isnt a number", () => {
+    expect(() => map.validateTileIndex("poo")).toThrow(error);
+  });
+
+  it("throws if the index is too large or too small", () => {
+    expect(() => map.validateTileIndex(100)).toThrow(error);
+    expect(() => map.validateTileIndex(-1)).toThrow(error);
+    expect(() => map.validateTileIndex()).toThrow(error);
+  });
+
+  it("doesnt throw if the index is correct", () => {
+    expect(() => map.validateTileIndex(0)).not.toThrow();
+    expect(() => map.validateTileIndex(tileset.length - 1)).not.toThrow();
+  });
+});
+
+describe("validate dimensions", () => {
+  it("throws if no width or height are set", () => {
+    map = new Tilemap();
+    expect(() => map.validateDimensions()).toThrow("expected width and height");
+  });
 });
 
 describe("set", () => {
@@ -164,5 +183,21 @@ describe("to2DArray", () => {
   it("fills in empty positions with null", () => {
     expect(result[0][0]).toBeNull();
     expect(result[1][1]).toBeNull();
+  });
+});
+
+describe("fromArray", () => {
+  it("validates the map dimensions", () => {
+    const validateDimensions = jest
+      .spyOn(map, "validateDimensions")
+      .mockImplementation(() => {});
+
+    expect(validateDimensions).not.toHaveBeenCalled();
+    map.fromArray([]);
+    expect(validateDimensions).toHaveBeenCalledTimes(1);
+  });
+
+  it("throws if no source array is passed", () => {
+    expect(() => map.fromArray()).toThrow("expected source array");
   });
 });
