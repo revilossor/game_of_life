@@ -4,6 +4,9 @@ const Tilemap = require("../src/Tilemap").default;
 
 const width = 2;
 const height = 2;
+
+const expectedLength = width * height;
+
 const tileset = ["dead", "alive"];
 
 const x = 1;
@@ -36,7 +39,7 @@ describe("constructor", () => {
   });
 });
 
-describe("validate point", () => {
+describe("validatePoint", () => {
   let error;
 
   it("throws if the x index is invalid", () => {
@@ -62,7 +65,7 @@ describe("validate point", () => {
   });
 });
 
-describe("validate tile index", () => {
+describe("validateTileIndex", () => {
   const error = Error(
     `the tile index should be a number between 0 and ${tileset.length}`
   );
@@ -83,26 +86,61 @@ describe("validate tile index", () => {
   });
 });
 
-describe("validate dimensions", () => {
+describe("validateDimensions", () => {
   it("throws if no width or height are set", () => {
     map = new Tilemap();
     expect(() => map.validateDimensions()).toThrow("expected width and height");
   });
 });
 
+describe("validateSourceArray", () => {
+  it("throws if no source array is passed", () => {
+    expect(() => map.validateSourceArray()).toThrow("expected source array");
+  });
+
+  it("throws if the source array has the wrong length", () => {
+    const error = Error(`expected an array of length ${expectedLength}`);
+    expect(() =>
+      map.validateSourceArray(new Array(expectedLength - 1))
+    ).toThrow(error);
+    expect(() =>
+      map.validateSourceArray(new Array(expectedLength + 1))
+    ).toThrow(error);
+  });
+
+  it("throws if any of the indexes are invalid", () => {
+    const error = Error(
+      `expected an array of tile indexes between 0 and ${tileset.length}`
+    );
+    const src = new Array(expectedLength);
+    src[0] = 9001;
+    expect(() => map.validateSourceArray(src)).toThrow(error);
+  });
+});
+
+describe("forEachTile", () => {
+  it("validates the map dimensions", () => {
+    const validateDimensions = jest
+      .spyOn(map, "validateDimensions")
+      .mockImplementation(() => {});
+
+    expect(validateDimensions).not.toHaveBeenCalled();
+    map.forEachTile(() => {});
+    expect(validateDimensions).toHaveBeenCalledTimes(1);
+  });
+
+  it("executes the callback once for each tile position", () => {
+    const cb = jest.fn();
+    map.forEachTile(cb);
+    expect(cb).toHaveBeenCalledWith(0, 0);
+    expect(cb).toHaveBeenCalledWith(1, 0);
+    expect(cb).toHaveBeenCalledWith(0, 1);
+    expect(cb).toHaveBeenCalledWith(1, 1);
+    expect(cb).toHaveBeenCalledTimes(4);
+  });
+});
+
 describe("set", () => {
-  it("sets the tile index at the coordinates", () => {
-    expect(map.tiles).toHaveLength(0);
-    map.set(x, y, value);
-    expect(map.tiles).toHaveLength(1);
-    expect(map.tiles.get({ x, y })).toBe(value);
-  });
-
-  it("is chainable", () => {
-    const returned = map.set(x, y, value).set(0, 0, value);
-    expect(returned).toBeInstanceOf(Tilemap);
-  });
-
   it("validates the position", () => {
     const validatePoint = jest
       .spyOn(map, "validatePoint")
@@ -123,6 +161,18 @@ describe("set", () => {
     map.set(x, y, value);
     expect(validateTileIndex).toHaveBeenCalledWith(value);
     expect(validateTileIndex).toHaveBeenCalledTimes(1);
+  });
+
+  it("sets the tile index at the coordinates", () => {
+    expect(map.tiles).toHaveLength(0);
+    map.set(x, y, value);
+    expect(map.tiles).toHaveLength(1);
+    expect(map.tiles.get({ x, y })).toBe(value);
+  });
+
+  it("is chainable", () => {
+    const returned = map.set(x, y, value).set(0, 0, value);
+    expect(returned).toBeInstanceOf(Tilemap);
   });
 });
 
@@ -187,17 +237,16 @@ describe("to2DArray", () => {
 });
 
 describe("fromArray", () => {
-  it("validates the map dimensions", () => {
-    const validateDimensions = jest
-      .spyOn(map, "validateDimensions")
+  it("validates the source array", () => {
+    const validateSourceArray = jest
+      .spyOn(map, "validateSourceArray")
       .mockImplementation(() => {});
 
-    expect(validateDimensions).not.toHaveBeenCalled();
-    map.fromArray([]);
-    expect(validateDimensions).toHaveBeenCalledTimes(1);
+    const source = new Array(tileset.length);
+    expect(validateSourceArray).not.toHaveBeenCalled();
+    map.fromArray(source);
+    expect(validateSourceArray).toHaveBeenCalledTimes(1);
+    expect(validateSourceArray).toHaveBeenCalledWith(source);
   });
-
-  it("throws if no source array is passed", () => {
-    expect(() => map.fromArray()).toThrow("expected source array");
-  });
+  // when set with thing, check tiles
 });

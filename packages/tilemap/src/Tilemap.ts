@@ -44,6 +44,34 @@ export default class Tilemap<T> {
     }
   }
 
+  protected validateSourceArray(src: number[]): void {
+    if (typeof src === "undefined") {
+      throw Error("expected source array");
+    }
+    const expectedLength = this.width * this.height;
+    if (src.length !== expectedLength) {
+      throw Error(`expected an array of length ${expectedLength}`);
+    }
+    src.forEach(index => {
+      try {
+        this.validateTileIndex(index);
+      } catch (err) {
+        throw Error(
+          `expected an array of tile indexes between 0 and ${this.tileset.length}`
+        );
+      }
+    });
+  }
+
+  public forEachTile(callback: (x: number, y: number) => void): void {
+    this.validateDimensions();
+    for (let y = 0; y < this.height; ++y) {
+      for (let x = 0; x < this.width; ++x) {
+        callback(x, y);
+      }
+    }
+  }
+
   public set(x: number, y: number, tileIndex: number): Tilemap<T> {
     this.validatePoint(x, y);
     this.validateTileIndex(tileIndex);
@@ -59,14 +87,6 @@ export default class Tilemap<T> {
     return array;
   }
 
-  public fromArray(src: (T | null)[]): Tilemap<T> {
-    this.validateDimensions();
-    if (typeof src === "undefined") {
-      throw Error("expected source array");
-    }
-    return this;
-  }
-
   public to2DArray(): (T | null)[][] {
     const array: (T | null)[] = this.toArray();
     const result: (T | null)[][] = [];
@@ -74,5 +94,11 @@ export default class Tilemap<T> {
       result.push(array.splice(0, this.width));
     }
     return result;
+  }
+
+  public fromArray(src: number[]): Tilemap<T> {
+    // sets each position using forEachTile
+    this.validateSourceArray(src);
+    return this;
   }
 }
