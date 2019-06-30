@@ -1,5 +1,5 @@
-const CellularAutomata = require("../src/CellularAutomata").default;
-const Tilemap = require("../src/Tilemap").default;
+const CellularAutomata = require("../../src/CellularAutomata").default;
+const Tilemap = require("../../src/Tilemap").default;
 
 const width = 3;
 const height = 3;
