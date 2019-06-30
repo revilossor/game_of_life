@@ -1,4 +1,5 @@
 import { PointMap } from "revilossor-game-common";
+import Neighbours from "./Neighbours";
 
 export default class Tilemap<T> {
   private tileset: T[];
@@ -98,11 +99,27 @@ export default class Tilemap<T> {
     return result;
   }
 
-  public fromTileIndexes(src: number[]): Tilemap<T> {
+  public load(src: number[]): Tilemap<T> {
     this.validateTileIndexes(src);
     this.forEachTile((x: number, y: number, index: number): void => {
       this.set(x, y, src[index]);
     });
     return this;
+  }
+
+  public getNeighbours(x: number, y: number): Neighbours {
+    function nullify(value?: number): number | null {
+      return typeof value === "undefined" ? null : value;
+    }
+    return {
+      topLeft: nullify(this.tiles.get({ x: x - 1, y: y - 1 })),
+      top: nullify(this.tiles.get({ x, y: y - 1 })),
+      topRight: nullify(this.tiles.get({ x: x + 1, y: y - 1 })),
+      left: nullify(this.tiles.get({ x: x - 1, y })),
+      right: nullify(this.tiles.get({ x: x + 1, y })),
+      bottomLeft: nullify(this.tiles.get({ x: x - 1, y: y + 1 })),
+      bottom: nullify(this.tiles.get({ x, y: y + 1 })),
+      bottomRight: nullify(this.tiles.get({ x: x + 1, y: y + 1 }))
+    };
   }
 }

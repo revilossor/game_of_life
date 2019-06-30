@@ -2,17 +2,25 @@ const { PointMap } = require("revilossor-game-common");
 
 const Tilemap = require("../src/Tilemap").default;
 
-const width = 2;
-const height = 2;
+const width = 3;
+const height = 3;
 
 const expectedLength = width * height;
 
-const tileset = ["dead", "alive"];
+const tileset = ["rock", "paper", "scissors"];
+const source = [0, 1, 2, 0, 1, 2, 0, 1, 2];
 
 const x = 1;
 const y = 2;
 
 let map;
+
+// TODO
+// static parse
+// serialise - "Tileset { w, h, t, i, }"
+// getNeighbours - returns a neighbours interface of tile indexes
+// automata - takes data of indexes dead / alive, rulestring, generations
+// path - thkes data of indexex traversal weight, src, dest
 
 beforeEach(() => {
   map = new Tilemap(width, height, tileset);
@@ -132,9 +140,14 @@ describe("forEachTile", () => {
     map.forEachTile(cb);
     expect(cb.mock.calls[0]).toEqual([0, 0, 0]);
     expect(cb.mock.calls[1]).toEqual([1, 0, 1]);
-    expect(cb.mock.calls[2]).toEqual([0, 1, 2]);
-    expect(cb.mock.calls[3]).toEqual([1, 1, 3]);
-    expect(cb).toHaveBeenCalledTimes(4);
+    expect(cb.mock.calls[2]).toEqual([2, 0, 2]);
+    expect(cb.mock.calls[3]).toEqual([0, 1, 3]);
+    expect(cb.mock.calls[4]).toEqual([1, 1, 4]);
+    expect(cb.mock.calls[5]).toEqual([2, 1, 5]);
+    expect(cb.mock.calls[6]).toEqual([0, 2, 6]);
+    expect(cb.mock.calls[7]).toEqual([1, 2, 7]);
+    expect(cb.mock.calls[8]).toEqual([2, 2, 8]);
+    expect(cb).toHaveBeenCalledTimes(9);
   });
 });
 
@@ -225,9 +238,9 @@ describe("to2DArray", () => {
     });
   });
 
-  it("writes entries from the top left to the bottom right", () => {
-    expect(result[0][1]).toEqual(tileset[topRightIndex]);
-    expect(result[1][0]).toEqual(tileset[bottomLeftIndex]);
+  it("sorts items as a list of rows", () => {
+    expect(result[0][width - 1]).toEqual(tileset[topRightIndex]);
+    expect(result[height - 1][0]).toEqual(tileset[bottomLeftIndex]);
   });
 
   it("fills in empty positions with null", () => {
@@ -236,24 +249,20 @@ describe("to2DArray", () => {
   });
 });
 
-describe("fromTileIndexes", () => {
-  const sourceTilemapIndexes = [0, 0, 0, 0];
-
+describe("load", () => {
   it("validates the source array", () => {
     const validateTileIndexes = jest
       .spyOn(map, "validateTileIndexes")
       .mockImplementation(() => {});
 
     expect(validateTileIndexes).not.toHaveBeenCalled();
-    map.fromTileIndexes(sourceTilemapIndexes);
+    map.load(source);
     expect(validateTileIndexes).toHaveBeenCalledTimes(1);
-    expect(validateTileIndexes).toHaveBeenCalledWith(sourceTilemapIndexes);
+    expect(validateTileIndexes).toHaveBeenCalledWith(source);
   });
 
   it("sets each tile correctly", () => {
-    map = new Tilemap(3, 3, ["a", "b", "c"]);
-    const source = [0, 1, 2, 0, 1, 2, 0, 1, 2];
-    map.fromTileIndexes(source);
+    map.load(source);
     expect(map.tiles.get({ x: 0, y: 0 })).toBe(0);
     expect(map.tiles.get({ x: 1, y: 0 })).toBe(1);
     expect(map.tiles.get({ x: 2, y: 0 })).toBe(2);
@@ -266,6 +275,38 @@ describe("fromTileIndexes", () => {
   });
 
   it("is chainable", () => {
-    expect(map.fromTileIndexes(sourceTilemapIndexes)).toBeInstanceOf(Tilemap);
+    expect(map.load(source)).toBeInstanceOf(Tilemap);
+  });
+});
+
+describe("getNeighbours", () => {
+  let neighbours;
+
+  beforeEach(() => {
+    map.load(source);
+  });
+
+  it("returns the correct neighbours object", () => {
+    neighbours = map.getNeighbours(1, 1);
+    expect(neighbours.topLeft).toBe(0);
+    expect(neighbours.top).toBe(1);
+    expect(neighbours.topRight).toBe(2);
+    expect(neighbours.left).toBe(0);
+    expect(neighbours.right).toBe(2);
+    expect(neighbours.bottomLeft).toBe(0);
+    expect(neighbours.bottom).toBe(1);
+    expect(neighbours.bottomRight).toBe(2);
+  });
+
+  it("off map edges are null", () => {
+    neighbours = map.getNeighbours(0, 0);
+    expect(neighbours.topLeft).toBeNull();
+    expect(neighbours.top).toBeNull();
+    expect(neighbours.topRight).toBeNull();
+    expect(neighbours.left).toBeNull();
+    expect(neighbours.right).toBe(1);
+    expect(neighbours.bottomLeft).toBeNull();
+    expect(neighbours.bottom).toBe(0);
+    expect(neighbours.bottomRight).toBe(1);
   });
 });
