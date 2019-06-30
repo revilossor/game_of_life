@@ -1,5 +1,10 @@
 import Neighbours from "./Neighbours";
-import Tilemap from "./Tilemap";
+import Tilemap from "../Tilemap";
+
+// lifecycle - init with b / s rule
+// - born, survive, die - random select index when changing state
+// what to do with nulls - alive / dead
+// try to loop or not
 
 export default class CellularAutomata<T> extends Tilemap<T> {
   public getNeighbours(x: number, y: number): Neighbours {

@@ -1,5 +1,3 @@
-const { PointMap } = require("revilossor-game-common");
-
 const CellularAutomata = require("../src/CellularAutomata").default;
 const Tilemap = require("../src/Tilemap").default;
 
@@ -51,11 +49,14 @@ describe("getNeighbours", () => {
   });
 });
 
-describe("automata", () => {
-  // liveIndexes, b/s rulestring, generations
-  // defaults - none, 012345678/012345678, 1
-  // for three rulestrings and default
-  // after one gen matches 2d array
-  // after ten gen matches 2d array
-  // describe("for the default rulestring ( */* )");
-});
+// describe("validateLiveIndexes", () => {
+//   // need dead index to turn it into here too...
+//   // throws if not array
+//   // throws if has member that is invalid index
+// });
+
+// validateRulestring - B/S - delimeter is /,|,\ for live, flip, dead
+// getLiveNeighbours(x, y, lifecycle)
+// process(x, y, lifecycle)
+// step(lifecycle)
+// automata(lifecycle, steps)
