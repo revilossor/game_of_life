@@ -18,8 +18,6 @@ let map;
 // TODO
 // static parse
 // serialise - "Tileset { w, h, t, i, }"
-// getNeighbours - returns a neighbours interface of tile indexes
-// automata - takes data of indexes dead / alive, rulestring, generations
 // path - thkes data of indexex traversal weight, src, dest
 
 beforeEach(() => {
@@ -276,37 +274,5 @@ describe("load", () => {
 
   it("is chainable", () => {
     expect(map.load(source)).toBeInstanceOf(Tilemap);
-  });
-});
-
-describe("getNeighbours", () => {
-  let neighbours;
-
-  beforeEach(() => {
-    map.load(source);
-  });
-
-  it("returns the correct neighbours object", () => {
-    neighbours = map.getNeighbours(1, 1);
-    expect(neighbours.topLeft).toBe(0);
-    expect(neighbours.top).toBe(1);
-    expect(neighbours.topRight).toBe(2);
-    expect(neighbours.left).toBe(0);
-    expect(neighbours.right).toBe(2);
-    expect(neighbours.bottomLeft).toBe(0);
-    expect(neighbours.bottom).toBe(1);
-    expect(neighbours.bottomRight).toBe(2);
-  });
-
-  it("off map edges are null", () => {
-    neighbours = map.getNeighbours(0, 0);
-    expect(neighbours.topLeft).toBeNull();
-    expect(neighbours.top).toBeNull();
-    expect(neighbours.topRight).toBeNull();
-    expect(neighbours.left).toBeNull();
-    expect(neighbours.right).toBe(1);
-    expect(neighbours.bottomLeft).toBeNull();
-    expect(neighbours.bottom).toBe(0);
-    expect(neighbours.bottomRight).toBe(1);
   });
 });
