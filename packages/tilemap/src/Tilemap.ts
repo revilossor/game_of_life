@@ -35,16 +35,7 @@ export default class Tilemap<T> {
     this.validateNumericField(index, this.tileset.length, "tile index");
   }
 
-  protected validateDimensions(): void {
-    if (
-      typeof this.width === "undefined" ||
-      typeof this.height === "undefined"
-    ) {
-      throw Error("expected width and height");
-    }
-  }
-
-  protected validateSourceArray(src: number[]): void {
+  protected validateTileIndexes(src: number[]): void {
     if (typeof src === "undefined") {
       throw Error("expected source array");
     }
@@ -63,11 +54,22 @@ export default class Tilemap<T> {
     });
   }
 
-  public forEachTile(callback: (x: number, y: number) => void): void {
+  protected validateDimensions(): void {
+    if (
+      typeof this.width === "undefined" ||
+      typeof this.height === "undefined"
+    ) {
+      throw Error("expected width and height");
+    }
+  }
+
+  public forEachTile(
+    callback: (x: number, y: number, index: number) => void
+  ): void {
     this.validateDimensions();
     for (let y = 0; y < this.height; ++y) {
       for (let x = 0; x < this.width; ++x) {
-        callback(x, y);
+        callback(x, y, this.width * y + x);
       }
     }
   }
@@ -96,9 +98,11 @@ export default class Tilemap<T> {
     return result;
   }
 
-  public fromArray(src: number[]): Tilemap<T> {
-    // sets each position using forEachTile
-    this.validateSourceArray(src);
+  public fromTileIndexes(src: number[]): Tilemap<T> {
+    this.validateTileIndexes(src);
+    this.forEachTile((x: number, y: number, index: number): void => {
+      this.set(x, y, src[index]);
+    });
     return this;
   }
 }
