@@ -43,7 +43,7 @@ export default class Tilemap<T> {
     if (src.length !== expectedLength) {
       throw Error(`expected an array of length ${expectedLength}`);
     }
-    src.forEach(index => {
+    src.forEach((index: number): void => {
       try {
         this.validateTileIndex(index);
       } catch (err) {

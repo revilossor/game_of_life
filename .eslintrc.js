@@ -14,7 +14,8 @@ module.exports = {
     "@typescript-eslint/no-var-requires": "off",
     "class-methods-use-this": "off",
     "no-undef": "off",
-    "no-console": "off"
+    "no-console": "off",
+    "no-plusplus": "off"
   },
   env: {
     "jest/globals": true,
