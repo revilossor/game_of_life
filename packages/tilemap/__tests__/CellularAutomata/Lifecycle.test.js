@@ -1,15 +1,12 @@
 const Lifecycle = require("../../src/CellularAutomata/Lifecycle").default;
 
-// parse digit list
-// validate rulestring - list nullDelimeter list loop - [123] [\ or /] [123] [h or v or b]
-
 let lifecycle;
 
 beforeEach(() => {
   lifecycle = new Lifecycle();
 });
 
-describe("validate rulestring", () => {
+describe("validateRulestring", () => {
   it.each([
     "",
     "123",
@@ -63,8 +60,45 @@ describe("parseDigitList", () => {
   });
 });
 
-// throws if on both lists
+describe("constructor", () => {
+  it("validates the rulestring", () => {
+    const validateRulestring = jest
+      .spyOn(Lifecycle.prototype, "validateRulestring")
+      .mockImplementation(() => {});
 
-// describe('default rulestring', () => {
-//
-// })
+    expect(validateRulestring).not.toHaveBeenCalled();
+    lifecycle = new Lifecycle();
+    expect(validateRulestring).toHaveBeenCalledTimes(1);
+  });
+});
+
+describe.each([["123/456", [1, 2, 3], [4, 5, 6], "dead", "none"]])(
+  'for rulestring "%s"',
+  (
+    rulestring,
+    expectedLiveList,
+    expectedSurviveList,
+    expectedNullMode,
+    expectedLoopMode
+  ) => {
+    beforeEach(() => {
+      lifecycle = new Lifecycle(rulestring);
+    });
+
+    it(`has a live list of "${expectedLiveList}"`, () => {
+      expect(lifecycle.liveList).toEqual(expectedLiveList);
+    });
+
+    it(`has a survive list of "${expectedSurviveList}"`, () => {
+      expect(lifecycle.surviveList).toEqual(expectedSurviveList);
+    });
+
+    it(`treats null values as ${expectedNullMode}`, () => {
+      expect(lifecycle.nullMode).toEqual(expectedNullMode);
+    });
+
+    it(`has a loop mode of ${expectedLoopMode}`, () => {
+      expect(lifecycle.loopMode).toEqual(expectedLoopMode);
+    });
+  }
+);

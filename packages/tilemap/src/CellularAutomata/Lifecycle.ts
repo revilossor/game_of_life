@@ -1,5 +1,15 @@
 export default class Lifecycle {
-  public constructor() {}
+  public liveList: number[] = [1, 2, 3];
+
+  public surviveList: number[] = [4, 5, 6];
+
+  public nullMode: string = "dead";
+
+  public loopMode: string = "none";
+
+  public constructor(public rulestring: string = "") {
+    this.validateRulestring(rulestring);
+  }
 
   protected validateRulestring(string: string): void {
     if (!string.match(/^\d*([\/-]\d*){0,1}[hvb]*$/)) {
