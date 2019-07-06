@@ -6,7 +6,6 @@ const width = 3;
 const height = 3;
 
 const tileset = ["rock", "paper", "scissors"];
-const source = [0, 1, 2, 0, 1, 2, 0, 1, 2];
 
 const lifecycle = new Lifecycle(["paper"], ["rock", "scissors"], [3], [2, 3]);
 
@@ -30,6 +29,7 @@ describe("constructor", () => {
 
 describe("getNeighbours", () => {
   let neighbours;
+  const source = [0, 1, 2, 0, 1, 2, 0, 1, 2];
 
   beforeEach(() => {
     map.load(source);

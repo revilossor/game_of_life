@@ -32,4 +32,9 @@ export default class CellularAutomata<T> extends Tilemap<T> {
   }
 
   // TODO generate with generations
+  public generate(generations: number): CellularAutomata<T> {
+    // for each tile, work out its processed value in 1d array
+    // does fromArray
+    return this;
+  }
 }

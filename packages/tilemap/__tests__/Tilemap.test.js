@@ -104,9 +104,32 @@ describe("validateTileIndexes", () => {
     const error = Error(
       `expected an array of tile indexes between 0 and ${tileset.length}`
     );
-    const src = new Array(expectedLength);
+    const src = new Array(expectedLength).fill(0);
     src[0] = 9001;
     expect(() => map.validateTileIndexes(src)).toThrow(error);
+  });
+});
+
+describe("validateTileValues", () => {
+  it("throws if no source array is passed", () => {
+    expect(() => map.validateTileValues()).toThrow("expected source array");
+  });
+
+  it("throws if the source array has the wrong length", () => {
+    const error = Error(`expected an array of length ${expectedLength}`);
+    expect(() => map.validateTileValues(new Array(expectedLength - 1))).toThrow(
+      error
+    );
+    expect(() => map.validateTileValues(new Array(expectedLength + 1))).toThrow(
+      error
+    );
+  });
+
+  it("throws if any of the values are invalid", () => {
+    const error = Error(`expected an array of items ${tileset}`);
+    const src = new Array(expectedLength).fill(tileset[0]);
+    src[0] = "chainsaw";
+    expect(() => map.validateTileValues(src)).toThrow(error);
   });
 });
 
@@ -179,6 +202,48 @@ describe("set", () => {
   it("is chainable", () => {
     const returned = map.set(x, y, value).set(0, 0, value);
     expect(returned).toBeInstanceOf(Tilemap);
+  });
+});
+
+describe("fromArray", () => {
+  const sourceArray = [
+    "rock",
+    "paper",
+    "scissors",
+    "rock",
+    "paper",
+    "scissors",
+    "rock",
+    "paper",
+    "scissors"
+  ];
+
+  it("validates the source array", () => {
+    const validateTileValues = jest
+      .spyOn(map, "validateTileValues")
+      .mockImplementation(() => {});
+
+    expect(validateTileValues).not.toHaveBeenCalled();
+    map.fromArray(sourceArray);
+    expect(validateTileValues).toHaveBeenCalledTimes(1);
+    expect(validateTileValues).toHaveBeenCalledWith(sourceArray);
+  });
+
+  it("sets each tile correctly, treating null as index 0", () => {
+    const result = map.fromArray(sourceArray);
+    expect(map.tiles.get({ x: 0, y: 0 })).toBe(0);
+    expect(map.tiles.get({ x: 1, y: 0 })).toBe(1);
+    expect(map.tiles.get({ x: 2, y: 0 })).toBe(2);
+    expect(map.tiles.get({ x: 0, y: 1 })).toBe(0);
+    expect(map.tiles.get({ x: 1, y: 1 })).toBe(1);
+    expect(map.tiles.get({ x: 2, y: 1 })).toBe(2);
+    expect(map.tiles.get({ x: 0, y: 2 })).toBe(0);
+    expect(map.tiles.get({ x: 1, y: 2 })).toBe(1);
+    expect(map.tiles.get({ x: 2, y: 2 })).toBe(2);
+  });
+
+  it("is chainable", () => {
+    expect(map.fromArray(sourceArray)).toBeInstanceOf(Tilemap);
   });
 });
 

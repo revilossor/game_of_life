@@ -54,6 +54,21 @@ export default class Tilemap<T> {
     });
   }
 
+  protected validateTileValues(src: T[]): void {
+    if (typeof src === "undefined") {
+      throw Error("expected source array");
+    }
+    const expectedLength = this.width * this.height;
+    if (src.length !== expectedLength) {
+      throw Error(`expected an array of length ${expectedLength}`);
+    }
+    src.forEach((value: T): void => {
+      if (this.tileset.indexOf(value) === -1) {
+        throw Error(`expected an array of items ${this.tileset}`);
+      }
+    });
+  }
+
   protected validateDimensions(): void {
     if (
       typeof this.width === "undefined" ||
@@ -78,6 +93,14 @@ export default class Tilemap<T> {
     this.validatePoint(x, y);
     this.validateTileIndex(tileIndex);
     this.tiles.set({ x, y }, tileIndex);
+    return this;
+  }
+
+  public fromArray(src: T[]): Tilemap<T> {
+    this.validateTileValues(src);
+    this.forEachTile((x: number, y: number, index: number): void => {
+      this.set(x, y, this.tileset.indexOf(src[index]));
+    });
     return this;
   }
 
