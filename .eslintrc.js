@@ -15,7 +15,11 @@ module.exports = {
     "class-methods-use-this": "off",
     "no-undef": "off",
     "no-console": "off",
-    "no-plusplus": "off"
+    "no-plusplus": "off",
+    "no-useless-constructor": "off",
+    "@typescript-eslint/no-parameter-properties": "off",
+    "no-bitwise": "off",
+    "no-empty-function": "off"
   },
   env: {
     "jest/globals": true,
