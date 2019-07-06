@@ -185,4 +185,22 @@ describe("process", () => {
       })
     ).toBe(dead[0]);
   });
+
+  it("doesnt change the value of a persisted state with more than one possible value", () => {
+    expect(
+      lifecycle.process(
+        {
+          topLeft: "scissors",
+          top: "rock",
+          topRight: "scissors",
+          left: "rock",
+          right: "scissors",
+          bottomLeft: "rock",
+          bottom: "scissors",
+          bottomRight: "rock"
+        },
+        dead[1]
+      )
+    ).toBe(dead[1]);
+  });
 });
