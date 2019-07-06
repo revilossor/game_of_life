@@ -230,7 +230,7 @@ describe("fromArray", () => {
   });
 
   it("sets each tile correctly, treating null as index 0", () => {
-    const result = map.fromArray(sourceArray);
+    map.fromArray(sourceArray);
     expect(map.tiles.get({ x: 0, y: 0 })).toBe(0);
     expect(map.tiles.get({ x: 1, y: 0 })).toBe(1);
     expect(map.tiles.get({ x: 2, y: 0 })).toBe(2);

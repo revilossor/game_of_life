@@ -15,26 +15,51 @@ export default class CellularAutomata<T> extends Tilemap<T> {
     this.lifecycle = lifecycle;
   }
 
-  public getNeighbours(x: number, y: number): Neighbours {
-    function nullify(value?: number): number | null {
+  public getNeighbours(x: number, y: number): Neighbours<T> {
+    function nullify(value?: T): T | null {
       return typeof value === "undefined" ? null : value;
     }
     return {
-      topLeft: nullify(this.tiles.get({ x: x - 1, y: y - 1 })),
-      top: nullify(this.tiles.get({ x, y: y - 1 })),
-      topRight: nullify(this.tiles.get({ x: x + 1, y: y - 1 })),
-      left: nullify(this.tiles.get({ x: x - 1, y })),
-      right: nullify(this.tiles.get({ x: x + 1, y })),
-      bottomLeft: nullify(this.tiles.get({ x: x - 1, y: y + 1 })),
-      bottom: nullify(this.tiles.get({ x, y: y + 1 })),
-      bottomRight: nullify(this.tiles.get({ x: x + 1, y: y + 1 }))
+      topLeft: nullify(this.tileset[this.tiles.get({ x: x - 1, y: y - 1 })]),
+      top: nullify(this.tileset[this.tiles.get({ x, y: y - 1 })]),
+      topRight: nullify(this.tileset[this.tiles.get({ x: x + 1, y: y - 1 })]),
+      left: nullify(this.tileset[this.tiles.get({ x: x - 1, y })]),
+      right: nullify(this.tileset[this.tiles.get({ x: x + 1, y })]),
+      bottomLeft: nullify(this.tileset[this.tiles.get({ x: x - 1, y: y + 1 })]),
+      bottom: nullify(this.tileset[this.tiles.get({ x, y: y + 1 })]),
+      bottomRight: nullify(this.tileset[this.tiles.get({ x: x + 1, y: y + 1 })])
     };
   }
 
-  // TODO generate with generations
+  private step(): CellularAutomata<T> {
+    const current: (T | null)[] = this.toArray();
+    const neighbourTuples: [T, Neighbours<T>][] = current.map(
+      (item: T | null, index: number): [T, Neighbours<T>] => {
+        return [
+          item || this.tileset[0],
+          this.getNeighbours(
+            index % this.width,
+            Math.floor(index / this.height)
+          )
+        ];
+      }
+    );
+    const processed: T[] = neighbourTuples.map(
+      (tuple: [T, Neighbours<T>]): T =>
+        this.lifecycle.process(tuple[1], tuple[0])
+    );
+    return this.fromArray(processed);
+  }
+
+  public fromArray(src: T[]): CellularAutomata<T> {
+    super.fromArray(src);
+    return this;
+  }
+
   public generate(generations: number): CellularAutomata<T> {
-    // for each tile, work out its processed value in 1d array
-    // does fromArray
+    for (let n: number = generations; n > 0; --n) {
+      this.step();
+    }
     return this;
   }
 }

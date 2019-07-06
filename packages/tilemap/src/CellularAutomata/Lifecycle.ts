@@ -16,19 +16,19 @@ export default class Lifecycle<T> {
     return this.dead[Math.floor(Math.random() * this.dead.length)];
   }
 
-  private getLiveNeighbours(neighbours: Neighbours): number {
+  private getLiveNeighbours(neighbours: Neighbours<T>): number {
+    // neighbours is indexes, not values....
     let lives = 0;
     Object.values(neighbours).forEach((value: T): void => {
-      if (~this.live.indexOf(value)) {
+      if (this.live.indexOf(value) > -1) {
         ++lives;
       }
     });
     return lives;
   }
 
-  public process(neighbours: Neighbours, value?: T): T {
+  public process(neighbours: Neighbours<T>, value?: T): T {
     const lives = this.getLiveNeighbours(neighbours);
-
     const getLiveIf = (): T => {
       if (typeof value === "undefined") {
         return this.liveValue;

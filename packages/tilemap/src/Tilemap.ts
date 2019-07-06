@@ -1,7 +1,7 @@
 import { PointMap } from "revilossor-game-common";
 
 export default class Tilemap<T> {
-  private tileset: T[];
+  protected tileset: T[];
 
   protected tiles: PointMap<number>;
 
