@@ -29,20 +29,20 @@ export default class Lifecycle<T> {
   public process(neighbours: Neighbours, value?: T): T {
     const lives = this.getLiveNeighbours(neighbours);
 
-    const getLiveIf = (value?: T): T => {
+    const getLiveIf = (): T => {
       if (typeof value === "undefined") {
         return this.liveValue;
       }
       return ~this.live.indexOf(value) ? value : this.liveValue;
     };
-    const getDeadIf = (value?: T): T => {
+    const getDeadIf = (): T => {
       if (typeof value === "undefined") {
         return this.deadValue;
       }
       return ~this.dead.indexOf(value) ? value : this.deadValue;
     };
     return ~this.born.indexOf(lives) || ~this.survive.indexOf(lives)
-      ? getLiveIf(value)
-      : getDeadIf(value);
+      ? getLiveIf()
+      : getDeadIf();
   }
 }
