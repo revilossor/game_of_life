@@ -1,4 +1,4 @@
-const Lifecycle = require("../../src/CellularAutomata/Lifecycle").default;
+const { Lifecycle } = require("../../src/CellularAutomata");
 
 let lifecycle;
 

@@ -1,6 +1,5 @@
-const CellularAutomata = require("../../src/CellularAutomata").default;
-const Tilemap = require("../../src/Tilemap").default;
-const Lifecycle = require("../../src/CellularAutomata/Lifecycle").default;
+const { CellularAutomata, Tilemap } = require("../../src");
+const { Lifecycle } = require("../../src/CellularAutomata");
 
 const width = 3;
 const height = 3;

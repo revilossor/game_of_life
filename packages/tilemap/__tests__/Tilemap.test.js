@@ -1,6 +1,6 @@
 const { PointMap } = require("revilossor-game-common");
 
-const Tilemap = require("../src/Tilemap").default;
+const { Tilemap } = require("../src");
 
 const width = 3;
 const height = 3;
