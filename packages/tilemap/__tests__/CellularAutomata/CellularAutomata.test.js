@@ -1,5 +1,6 @@
 const CellularAutomata = require("../../src/CellularAutomata").default;
 const Tilemap = require("../../src/Tilemap").default;
+const Lifecycle = require("../../src/CellularAutomata/Lifecycle").default;
 
 const width = 3;
 const height = 3;
@@ -7,14 +8,24 @@ const height = 3;
 const tileset = ["rock", "paper", "scissors"];
 const source = [0, 1, 2, 0, 1, 2, 0, 1, 2];
 
+const lifecycle = new Lifecycle(["paper"], ["rock", "scissors"], [3], [2, 3]);
+
 let map;
 
 beforeEach(() => {
-  map = new CellularAutomata(width, height, tileset);
+  map = new CellularAutomata(width, height, tileset, lifecycle);
 });
 
 it("extends Tilemap", () => {
   expect(map).toBeInstanceOf(Tilemap);
+});
+
+describe("constructor", () => {
+  describe("assigns constructor values", () => {
+    it("lifecycle", () => {
+      expect(map.lifecycle).toBe(lifecycle);
+    });
+  });
 });
 
 describe("getNeighbours", () => {

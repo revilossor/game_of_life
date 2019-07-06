@@ -1,7 +1,20 @@
 import Neighbours from "./Neighbours";
+import Lifecycle from "./Lifecycle";
 import Tilemap from "../Tilemap";
 
 export default class CellularAutomata<T> extends Tilemap<T> {
+  protected lifecycle: Lifecycle<T>;
+
+  public constructor(
+    width: number,
+    height: number,
+    tileset: T[],
+    lifecycle: Lifecycle<T>
+  ) {
+    super(width, height, tileset);
+    this.lifecycle = lifecycle;
+  }
+
   public getNeighbours(x: number, y: number): Neighbours {
     function nullify(value?: number): number | null {
       return typeof value === "undefined" ? null : value;
@@ -18,8 +31,5 @@ export default class CellularAutomata<T> extends Tilemap<T> {
     };
   }
 
-  // TODO construct with lifecycle, w, h, tileset model
   // TODO generate with generations
-  // TODO save includes lifecycle
-  // TODO load includes lifecycle
 }
