@@ -1,44 +1,35 @@
-export default class Lifecycle {
-  public liveList: number[] = [1, 2, 3];
+import Neighbours from "./Neighbours";
 
-  public surviveList: number[] = [4, 5, 6];
+export default class Lifecycle<T> {
+  public constructor(
+    public live: T[],
+    public dead: T[],
+    public born: number[],
+    public survive: number[]
+  ) {}
 
-  public nullMode: string = "dead";
-
-  public loopMode: string = "none";
-
-  public constructor(rulestring: string = "") {
-    this.validateRulestring(rulestring);
+  public get liveValue(): T {
+    return this.live[Math.floor(Math.random() * this.live.length)];
   }
 
-  protected validateRulestring(string: string): void {
-    if (!string.match(/^\d*([/-]\d*){0,1}[hvb]*$/)) {
-      throw Error("expected a valid rulestring");
-    }
-    const parts: string[] = string.split(/[/-]/); // TODO listsFromString?
-    if (parts.length === 2) {
-      const last: string = parts.pop() || "";
-      parts.push(last.split(/[hvb]/)[0]);
-      const born: number[] = this.parseDigitList(parts[0]);
-      const survive: number[] = this.parseDigitList(parts[1]);
-      if (born.some((index: number): boolean => survive.indexOf(index) >= 0)) {
-        throw Error(
-          "expected a rulestring with mutually exclusive born and survive lists"
-        );
+  public get deadValue(): T {
+    return this.dead[Math.floor(Math.random() * this.dead.length)];
+  }
+
+  private getLiveNeighbours(neighbours: Neighbours): number {
+    let lives = 0;
+    Object.values(neighbours).forEach((value: T): void => {
+      if (~this.live.indexOf(value)) {
+        ++lives;
       }
-    }
+    });
+    return lives;
   }
 
-  protected parseDigitList(string: string): number[] {
-    let i: number = string.length;
-    const indexes: Set<number> = new Set<number>();
-    while (i--) {
-      indexes.add(parseInt(string.charAt(i), 10));
-    }
-    const list: number[] = [...indexes];
-    if (list.some((item: number): boolean => Number.isNaN(item))) {
-      throw Error("expected each digit to be an integer");
-    }
-    return list;
+  public process(neighbours: Neighbours): T {
+    const lives = this.getLiveNeighbours(neighbours);
+    return ~this.born.indexOf(lives) || ~this.survive.indexOf(lives)
+      ? this.liveValue
+      : this.deadValue;
   }
 }
