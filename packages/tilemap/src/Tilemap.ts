@@ -101,10 +101,16 @@ export default class Tilemap<T> {
   public load(src: number[]): Tilemap<T> {
     this.validateTileIndexes(src);
     this.forEachTile((x: number, y: number, index: number): void => {
-      this.set(x, y, src[index]);
+      this.set(x, y, src[index] === null ? 0 : src[index]);
     });
     return this;
   }
 
-  // TODO save - to 1d array of indexes - override in children
+  public save(): number[] {
+    const array = new Array(this.width * this.height).fill(null);
+    this.tiles.entries.forEach(([{ x, y }, value]): void => {
+      array[y * this.width + x] = value;
+    });
+    return array;
+  }
 }

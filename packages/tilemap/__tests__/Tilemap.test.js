@@ -8,7 +8,7 @@ const height = 3;
 const expectedLength = width * height;
 
 const tileset = ["rock", "paper", "scissors"];
-const source = [0, 1, 2, 0, 1, 2, 0, 1, 2];
+const source = [0, 1, 2, null, null, null, 0, 1, 2];
 
 const x = 1;
 const y = 2;
@@ -254,14 +254,14 @@ describe("load", () => {
     expect(validateTileIndexes).toHaveBeenCalledWith(source);
   });
 
-  it("sets each tile correctly", () => {
+  it("sets each tile correctly, treating null as index 0", () => {
     map.load(source);
     expect(map.tiles.get({ x: 0, y: 0 })).toBe(0);
     expect(map.tiles.get({ x: 1, y: 0 })).toBe(1);
     expect(map.tiles.get({ x: 2, y: 0 })).toBe(2);
     expect(map.tiles.get({ x: 0, y: 1 })).toBe(0);
-    expect(map.tiles.get({ x: 1, y: 1 })).toBe(1);
-    expect(map.tiles.get({ x: 2, y: 1 })).toBe(2);
+    expect(map.tiles.get({ x: 1, y: 1 })).toBe(0);
+    expect(map.tiles.get({ x: 2, y: 1 })).toBe(0);
     expect(map.tiles.get({ x: 0, y: 2 })).toBe(0);
     expect(map.tiles.get({ x: 1, y: 2 })).toBe(1);
     expect(map.tiles.get({ x: 2, y: 2 })).toBe(2);
@@ -269,5 +269,33 @@ describe("load", () => {
 
   it("is chainable", () => {
     expect(map.load(source)).toBeInstanceOf(Tilemap);
+  });
+});
+
+describe("save", () => {
+  let result;
+
+  const topLeftIndex = 0;
+  const bottomRightIndex = 1;
+
+  beforeEach(() => {
+    map.set(0, 0, topLeftIndex);
+    map.set(width - 1, height - 1, bottomRightIndex);
+    result = map.save();
+  });
+
+  it("returns an array with an entry for each tile position", () => {
+    expect(result).toBeInstanceOf(Array);
+    expect(result).toHaveLength(width * height);
+  });
+
+  it("writes tile indexes from the top left to the bottom right", () => {
+    expect(result[0]).toEqual(topLeftIndex);
+    expect(result[result.length - 1]).toEqual(bottomRightIndex);
+  });
+
+  it("fills in empty positions with null", () => {
+    expect(result[1]).toBeNull();
+    expect(result[2]).toBeNull();
   });
 });
