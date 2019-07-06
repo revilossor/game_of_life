@@ -105,4 +105,6 @@ export default class Tilemap<T> {
     });
     return this;
   }
+
+  // TODO save - to 1d array of indexes - override in children
 }

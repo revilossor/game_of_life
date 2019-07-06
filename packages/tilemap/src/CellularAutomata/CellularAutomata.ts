@@ -1,9 +1,6 @@
 import Neighbours from "./Neighbours";
 import Tilemap from "../Tilemap";
 
-// lifecycle - init with b / s rule
-// - born, survive, die - random select index when changing state
-
 export default class CellularAutomata<T> extends Tilemap<T> {
   public getNeighbours(x: number, y: number): Neighbours {
     function nullify(value?: number): number | null {
@@ -20,4 +17,9 @@ export default class CellularAutomata<T> extends Tilemap<T> {
       bottomRight: nullify(this.tiles.get({ x: x + 1, y: y + 1 }))
     };
   }
+
+  // TODO construct with lifecycle, w, h, tileset model
+  // TODO generate with generations
+  // TODO save includes lifecycle
+  // TODO load includes lifecycle
 }

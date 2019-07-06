@@ -48,15 +48,3 @@ describe("getNeighbours", () => {
     expect(neighbours.bottomRight).toBe(1);
   });
 });
-
-// describe("validateLiveIndexes", () => {
-//   // need dead index to turn it into here too...
-//   // throws if not array
-//   // throws if has member that is invalid index
-// });
-
-// validateRulestring - B/S - delimeter is /,|,\ for live, flip, dead
-// getLiveNeighbours(x, y, lifecycle)
-// process(x, y, lifecycle)
-// step(lifecycle)
-// automata(lifecycle, steps)

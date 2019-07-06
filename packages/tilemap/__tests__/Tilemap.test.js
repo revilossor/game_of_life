@@ -15,11 +15,6 @@ const y = 2;
 
 let map;
 
-// TODO
-// static parse
-// serialise - "Tileset { w, h, t, i, }"
-// path - thkes data of indexex traversal weight, src, dest
-
 beforeEach(() => {
   map = new Tilemap(width, height, tileset);
 });

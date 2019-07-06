@@ -47,7 +47,7 @@ describe("process", () => {
     Math.floor = () => 0;
   });
 
-  it("calculates birth correctly", () => {
+  it("calculates birth correctly, treating null as dead", () => {
     expect(
       lifecycle.process({
         topLeft: "paper",
