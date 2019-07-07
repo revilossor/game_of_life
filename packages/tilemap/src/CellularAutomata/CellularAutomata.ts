@@ -48,6 +48,11 @@ export default class CellularAutomata<T> extends Tilemap<T> {
       (tuple: [T, Neighbours<T>]): T =>
         this.lifecycle.process(tuple[1], tuple[0])
     );
+    // console.dir({
+    //   current,
+    //   neighbourTuples,
+    //   processed
+    // });
     return this.fromArray(processed);
   }
 

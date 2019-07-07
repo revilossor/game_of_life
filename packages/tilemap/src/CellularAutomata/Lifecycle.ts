@@ -17,7 +17,6 @@ export default class Lifecycle<T> {
   }
 
   private getLiveNeighbours(neighbours: Neighbours<T>): number {
-    // neighbours is indexes, not values....
     let lives = 0;
     Object.values(neighbours).forEach((value: T): void => {
       if (this.live.indexOf(value) > -1) {
@@ -27,22 +26,26 @@ export default class Lifecycle<T> {
     return lives;
   }
 
-  public process(neighbours: Neighbours<T>, value?: T): T {
+  public process(neighbours: Neighbours<T>, value: T): T {
     const lives = this.getLiveNeighbours(neighbours);
     const getLiveIf = (): T => {
       if (typeof value === "undefined") {
         return this.liveValue;
       }
-      return ~this.live.indexOf(value) ? value : this.liveValue;
+      return this.live.indexOf(value) >= 0 ? value : this.liveValue;
     };
     const getDeadIf = (): T => {
       if (typeof value === "undefined") {
         return this.deadValue;
       }
-      return ~this.dead.indexOf(value) ? value : this.deadValue;
+      return this.dead.indexOf(value) >= 0 ? value : this.deadValue;
     };
-    return ~this.born.indexOf(lives) || ~this.survive.indexOf(lives)
-      ? getLiveIf()
-      : getDeadIf();
+    if (this.born.indexOf(lives) >= 0) {
+      return getLiveIf();
+    }
+    if (this.live.indexOf(value) >= 0 && this.survive.indexOf(lives) >= 0) {
+      return getLiveIf();
+    }
+    return getDeadIf();
   }
 }

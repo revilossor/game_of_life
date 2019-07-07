@@ -75,28 +75,34 @@ describe("process", () => {
   });
   it("calculates survival correctly", () => {
     expect(
-      lifecycle.process({
-        topLeft: "paper",
-        top: "paper",
-        topRight: null,
-        left: "rock",
-        right: "scissors",
-        bottomLeft: "rock",
-        bottom: "scissors",
-        bottomRight: "rock"
-      })
+      lifecycle.process(
+        {
+          topLeft: "paper",
+          top: "paper",
+          topRight: null,
+          left: "rock",
+          right: "scissors",
+          bottomLeft: "rock",
+          bottom: "scissors",
+          bottomRight: "rock"
+        },
+        live[0]
+      )
     ).toBe(live[0]);
     expect(
-      lifecycle.process({
-        topLeft: null,
-        top: null,
-        topRight: "paper",
-        left: null,
-        right: null,
-        bottomLeft: "paper",
-        bottom: null,
-        bottomRight: "paper"
-      })
+      lifecycle.process(
+        {
+          topLeft: null,
+          top: null,
+          topRight: "paper",
+          left: null,
+          right: null,
+          bottomLeft: "paper",
+          bottom: null,
+          bottomRight: "paper"
+        },
+        live[0]
+      )
     ).toBe(live[0]);
   });
   it("calculates death correctly", () => {
