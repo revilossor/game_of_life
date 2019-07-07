@@ -307,6 +307,25 @@ describe("to2DArray", () => {
   });
 });
 
+describe("toString", () => {
+  let result;
+
+  beforeEach(() => {
+    map.load(source);
+    result = map.toString();
+  });
+
+  it("returns a string representation of the tilemap", () => {
+    expect(result).toEqual(
+      `
+rock,paper,scissors
+rock,rock,rock
+rock,paper,scissors
+`
+    );
+  });
+});
+
 describe("load", () => {
   it("validates the source array", () => {
     const validateTileIndexes = jest

@@ -121,6 +121,15 @@ export default class Tilemap<T> {
     return result;
   }
 
+  public toString(): String {
+    const tiles: (T | null)[][] = this.to2DArray();
+    let output = `\n`;
+    tiles.forEach((row: (T | null)[]): void => {
+      output += `${row}\n`;
+    });
+    return output;
+  }
+
   public load(src: number[]): Tilemap<T> {
     this.validateTileIndexes(src);
     this.forEachTile((x: number, y: number, index: number): void => {
