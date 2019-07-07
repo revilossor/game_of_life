@@ -48,11 +48,6 @@ export default class CellularAutomata<T> extends Tilemap<T> {
       (tuple: [T, Neighbours<T>]): T =>
         this.lifecycle.process(tuple[1], tuple[0])
     );
-    // console.dir({
-    //   current,
-    //   neighbourTuples,
-    //   processed
-    // });
     return this.fromArray(processed);
   }
 
@@ -65,6 +60,15 @@ export default class CellularAutomata<T> extends Tilemap<T> {
     for (let n: number = generations; n > 0; --n) {
       this.step();
     }
+    return this;
+  }
+
+  public noise(): CellularAutomata<T> {
+    const source: number[] = [];
+    for (let i = 0; i < this.width * this.height; ++i) {
+      source.push(Math.round(Math.random() * this.tileset.length));
+    }
+    this.load(source);
     return this;
   }
 }

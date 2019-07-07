@@ -166,3 +166,16 @@ describe("generate", () => {
     expect(returned).toBeInstanceOf(CellularAutomata);
   });
 });
+
+describe("noise", () => {
+  beforeEach(() => {
+    Math.random = jest.fn();
+    Math.round = () => 0;
+    map.noise();
+  });
+  it("sets each tile to a random index", () => {
+    expect(Math.random).toHaveBeenCalledTimes(width * height);
+    const tiles = map.save();
+    expect(tiles).toEqual([0, 0, 0, 0, 0, 0, 0, 0, 0]);
+  });
+});

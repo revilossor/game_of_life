@@ -74,6 +74,7 @@ describe("process", () => {
     ).toBe(live[0]);
   });
   it("calculates survival correctly", () => {
+    // only if currently alive
     expect(
       lifecycle.process(
         {
