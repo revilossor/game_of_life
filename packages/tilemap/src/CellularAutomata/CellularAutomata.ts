@@ -64,9 +64,10 @@ export default class CellularAutomata<T> extends Tilemap<T> {
   }
 
   public noise(): CellularAutomata<T> {
+    const length = this.width * this.height;
     const source: number[] = [];
-    for (let i = 0; i < this.width * this.height; ++i) {
-      source.push(Math.round(Math.random() * this.tileset.length));
+    for (let i = 0; i < length; ++i) {
+      source.push(Math.floor(Math.random() * this.tileset.length));
     }
     this.load(source);
     return this;

@@ -170,7 +170,7 @@ describe("generate", () => {
 describe("noise", () => {
   beforeEach(() => {
     Math.random = jest.fn();
-    Math.round = () => 0;
+    Math.floor = () => 0;
     map.noise();
   });
   it("sets each tile to a random index", () => {
