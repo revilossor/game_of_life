@@ -173,11 +173,26 @@ describe("noise", () => {
     Math.floor = jest.fn(() => 0);
     map.noise();
   });
-  it("sets each tile to a random index", () => {
-    const length = width * height;
-    expect(Math.random).toHaveBeenCalledTimes(length);
-    expect(Math.floor).toHaveBeenCalledTimes(length);
-    const tiles = map.save();
-    expect(tiles).toEqual([0, 0, 0, 0, 0, 0, 0, 0, 0]);
+
+  describe("when no argument is passed", () => {
+    it("sets each tile to a random index", () => {
+      const length = width * height;
+      expect(Math.random).toHaveBeenCalledTimes(length);
+      expect(Math.floor).toHaveBeenCalledTimes(length);
+      const tiles = map.save();
+      expect(tiles).toEqual([0, 0, 0, 0, 0, 0, 0, 0, 0]);
+    });
+  });
+
+  describe("when an argument that isnt between 0 and 1 is passed", () => {
+    it("throws", () => {
+      const error = Error("expected a number between 0 and 1");
+      expect.assertions(1);
+      try {
+        map.noise(12);
+      } catch (err) {
+        expect(err).toEqual(error);
+      }
+    });
   });
 });

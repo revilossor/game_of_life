@@ -63,7 +63,14 @@ export default class CellularAutomata<T> extends Tilemap<T> {
     return this;
   }
 
-  public noise(): CellularAutomata<T> {
+  public noise(percentAlive: number): CellularAutomata<T> {
+    if (
+      typeof percentAlive !== "undefined" &&
+      (percentAlive < 0 || percentAlive > 1)
+    ) {
+      throw Error("expected a number between 0 and 1");
+    }
+
     const length = this.width * this.height;
     const source: number[] = [];
     for (let i = 0; i < length; ++i) {
