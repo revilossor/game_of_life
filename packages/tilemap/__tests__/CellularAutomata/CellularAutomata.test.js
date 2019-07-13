@@ -170,11 +170,13 @@ describe("generate", () => {
 describe("noise", () => {
   beforeEach(() => {
     Math.random = jest.fn();
-    Math.floor = () => 0;
+    Math.floor = jest.fn(() => 0);
     map.noise();
   });
   it("sets each tile to a random index", () => {
-    expect(Math.random).toHaveBeenCalledTimes(width * height);
+    const length = width * height;
+    expect(Math.random).toHaveBeenCalledTimes(length);
+    expect(Math.floor).toHaveBeenCalledTimes(length);
     const tiles = map.save();
     expect(tiles).toEqual([0, 0, 0, 0, 0, 0, 0, 0, 0]);
   });
