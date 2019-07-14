@@ -121,7 +121,7 @@ export default class Tilemap<T> {
     return result;
   }
 
-  public toString(delimeter: string = ","): string {
+  public toString(delimeter: string = ""): string {
     const tiles: (T | null)[][] = this.to2DArray();
     let output = `\n`;
     tiles.forEach((row: (T | null)[]): void => {

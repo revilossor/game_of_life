@@ -28,7 +28,7 @@ map.load(source);
 const log = () => {
   map.generate(1);
   console.log("\033c");
-  console.log(map.toString(""));
+  console.log(map.toString());
 };
 
 log();

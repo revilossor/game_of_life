@@ -319,9 +319,9 @@ describe("toString", () => {
       result = map.toString();
     });
 
-    it("returns a string representation of the tilemap, with commas", () => {
+    it("returns a string representation of the tilemap, with no delimeter", () => {
       expect(result).toEqual(
-        "\nrock,paper,scissors\nrock,rock,rock\nrock,paper,scissors\n"
+        "\nrockpaperscissors\nrockrockrock\nrockpaperscissors\n"
       );
     });
   });
