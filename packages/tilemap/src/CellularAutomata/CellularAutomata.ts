@@ -93,9 +93,9 @@ export default class CellularAutomata<T> extends Tilemap<T> {
     }
 
     const shuffledSource: number[] = source
-      .map((item: number) => [Math.random(), item])
-      .sort((a: number[], b: number[]) => a[0] - b[0])
-      .map((a: number[]) => a[1]);
+      .map((item: number): number[] => [Math.random(), item])
+      .sort((a: number[], b: number[]): number => a[0] - b[0])
+      .map((a: number[]): number => a[1]);
 
     this.load(shuffledSource);
 
