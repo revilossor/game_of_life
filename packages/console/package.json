@@ -1,0 +1,22 @@
+{
+  "name": "revilossor-game-console",
+  "version": "0.0.0",
+  "description": "> TODO: description",
+  "author": "Oliver Ross <oliver.ross01@bbc.co.uk>",
+  "homepage": "https://github.com/revilossor/game#readme",
+  "license": "ISC",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/revilossor/game.git"
+  },
+  "bugs": {
+    "url": "https://github.com/revilossor/game/issues"
+  },
+  "dependencies": {
+    "revilossor-game-tilemap": "^0.0.0"
+  },
+  "scripts": {
+    "glider": "node glider",
+    "life": "node life"
+  }
+}

@@ -1,6 +1,5 @@
 /* eslint-disable no-octal-escape */
-const { CellularAutomata } = require("./dist");
-const { Lifecycle } = require("./dist/CellularAutomata");
+const { CellularAutomata, Lifecycle } = require("revilossor-game-tilemap");
 
 const width = 50;
 const height = 50;
