@@ -4,18 +4,13 @@ const { CellularAutomata, Lifecycle } = require("revilossor-game-tilemap");
 const width = 50;
 const height = 50;
 
-const tileset = ["\x1b[2m[ ]\x1b[0m", "\x1b[2m[\x1b[0mx\x1b[2m]\x1b[0m"];
+const tileset = ["[]", "  "];
 
-const lifecycle = new Lifecycle(
-  ["\x1b[2m[\x1b[0mx\x1b[2m]\x1b[0m"],
-  ["\x1b[2m[ ]\x1b[0m"],
-  [4, 5, 6, 7, 8],
-  [3]
-);
+const lifecycle = new Lifecycle(["[]"], ["  "], [3], [4, 5, 6, 7, 8]);
 
 const map = new CellularAutomata(width, height, tileset, lifecycle);
 
-map.noise(0.3);
+map.noise(0.15);
 
 const log = () => {
   map.generate(1);
@@ -24,5 +19,5 @@ const log = () => {
 };
 
 log();
-setInterval(log, 500);
+setInterval(log, 150);
 /* es-lint-enable no-octal-escape */
