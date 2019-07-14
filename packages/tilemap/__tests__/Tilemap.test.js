@@ -312,17 +312,32 @@ describe("toString", () => {
 
   beforeEach(() => {
     map.load(source);
-    result = map.toString();
   });
 
-  it("returns a string representation of the tilemap", () => {
-    expect(result).toEqual(
-      `
-rock,paper,scissors
-rock,rock,rock
-rock,paper,scissors
-`
-    );
+  describe("if no delimeter argument is passed", () => {
+    beforeEach(() => {
+      result = map.toString();
+    });
+
+    it("returns a string representation of the tilemap, with commas", () => {
+      expect(result).toEqual(
+        "\nrock,paper,scissors\nrock,rock,rock\nrock,paper,scissors\n"
+      );
+    });
+  });
+
+  describe("if a delimeter argument is passed", () => {
+    const delimeter = "||";
+
+    beforeEach(() => {
+      result = map.toString(delimeter);
+    });
+
+    it("returns a string representation of the tilemap, with the delimeter", () => {
+      expect(result).toEqual(
+        `\nrock${delimeter}paper${delimeter}scissors\nrock${delimeter}rock${delimeter}rock\nrock${delimeter}paper${delimeter}scissors\n`
+      );
+    });
   });
 });
 

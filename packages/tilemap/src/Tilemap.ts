@@ -121,11 +121,11 @@ export default class Tilemap<T> {
     return result;
   }
 
-  public toString(): string {
+  public toString(delimeter: string = ","): string {
     const tiles: (T | null)[][] = this.to2DArray();
     let output = `\n`;
     tiles.forEach((row: (T | null)[]): void => {
-      output += `${row}\n`;
+      output += `${row.join(delimeter)}\n`;
     });
     return output;
   }

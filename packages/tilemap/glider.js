@@ -2,8 +2,8 @@
 const { CellularAutomata } = require("./dist");
 const { Lifecycle } = require("./dist/CellularAutomata");
 
-const width = 30;
-const height = 30;
+const width = 50;
+const height = 50;
 
 const tileset = ["\x1b[2m[ ]\x1b[0m", "\x1b[2m[\x1b[0mx\x1b[2m]\x1b[0m"];
 
@@ -28,7 +28,7 @@ map.load(source);
 const log = () => {
   map.generate(1);
   console.log("\033c");
-  console.log(map.toString());
+  console.log(map.toString(""));
 };
 
 log();
