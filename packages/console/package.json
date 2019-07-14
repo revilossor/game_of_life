@@ -17,6 +17,8 @@
   },
   "scripts": {
     "glider": "node glider",
-    "life": "node life"
+    "life": "node life",
+    "maze": "node maze",
+    "coral": "node coral"
   }
 }
