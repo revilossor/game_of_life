@@ -1,8 +1,8 @@
 /* eslint-disable no-octal-escape */
 const { CellularAutomata, Lifecycle } = require("revilossor-game-tilemap");
 
-const width = 50;
-const height = 50;
+const width = 92;
+const height = 53;
 
 const tileset = ["[]", "  "];
 

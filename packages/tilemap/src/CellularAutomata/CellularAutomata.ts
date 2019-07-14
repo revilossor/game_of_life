@@ -37,10 +37,7 @@ export default class CellularAutomata<T> extends Tilemap<T> {
       (item: T | null, index: number): [T, Neighbours<T>] => {
         return [
           item || this.tileset[0],
-          this.getNeighbours(
-            index % this.width,
-            Math.floor(index / this.height)
-          )
+          this.getNeighbours(index % this.width, Math.floor(index / this.width))
         ];
       }
     );

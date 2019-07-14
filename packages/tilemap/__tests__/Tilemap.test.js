@@ -273,6 +273,15 @@ describe("toArray", () => {
     expect(result[1]).toBeNull();
     expect(result[2]).toBeNull();
   });
+
+  it("works for different dimensions", () => {
+    map = new Tilemap(4, 2, tileset);
+    map.set(0, 0, topLeftIndex);
+    map.set(3, 1, bottomRightIndex);
+    result = map.toArray();
+    expect(result[0]).toEqual(tileset[topLeftIndex]);
+    expect(result[result.length - 1]).toEqual(tileset[bottomRightIndex]);
+  });
 });
 
 describe("to2DArray", () => {
@@ -304,6 +313,15 @@ describe("to2DArray", () => {
   it("fills in empty positions with null", () => {
     expect(result[0][0]).toBeNull();
     expect(result[1][1]).toBeNull();
+  });
+
+  it("works for different dimensions", () => {
+    map = new Tilemap(4, 2, tileset);
+    map.set(3, 0, topRightIndex);
+    map.set(0, 1, bottomLeftIndex);
+    result = map.to2DArray();
+    expect(result[0][3]).toEqual(tileset[topRightIndex]);
+    expect(result[1][0]).toEqual(tileset[bottomLeftIndex]);
   });
 });
 
@@ -338,6 +356,14 @@ describe("toString", () => {
         `\nrock${delimeter}paper${delimeter}scissors\nrock${delimeter}rock${delimeter}rock\nrock${delimeter}paper${delimeter}scissors\n`
       );
     });
+  });
+
+  it("works for different dimensions", () => {
+    map = new Tilemap(4, 2, tileset);
+    map.load([1, 0, 0, 1, 0, 2, 2, 0]);
+    expect(map.toString()).toEqual(
+      "\npaperrockrockpaper\nrockscissorsscissorsrock\n"
+    );
   });
 });
 

@@ -146,6 +146,25 @@ describe("step", () => {
     ]);
   });
 
+  it("works if width and height arent the same", () => {
+    map = new CellularAutomata(
+      4,
+      2,
+      tiles,
+      new Lifecycle(["alive"], ["dead"], [3], [2, 3])
+    );
+
+    expect(
+      map
+        .load([0, 1, 0, 1, 1, 0, 1, 0])
+        .step()
+        .to2DArray()
+    ).toEqual([
+      ["dead", "alive", "alive", "dead"],
+      ["dead", "alive", "alive", "dead"]
+    ]);
+  });
+
   it("is chainable", () => {
     const returned = map.step();
     expect(returned).toBeInstanceOf(CellularAutomata);

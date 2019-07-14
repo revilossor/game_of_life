@@ -1,7 +1,7 @@
 /* eslint-disable no-octal-escape */
 const { CellularAutomata, Lifecycle } = require("revilossor-game-tilemap");
 
-const width = 50; // TODO theres a bug when width and height arent the same
+const width = 92;
 const height = 50;
 
 const tileset = ["[]", "  "];
