@@ -168,6 +168,13 @@ describe("generate", () => {
 });
 
 describe("noise", () => {
+  const countAlives = automata =>
+    automata
+      .save()
+      .filter(
+        item => automata.lifecycle.live.indexOf(automata.tileset[item]) > -1
+      ).length;
+
   describe("when no argument is passed", () => {
     beforeEach(() => {
       Math.floor = jest.fn(() => 0);
@@ -177,12 +184,11 @@ describe("noise", () => {
     it("sets each tile to a random index", () => {
       const length = width * height;
       expect(Math.floor).toHaveBeenCalledTimes(length);
-      const tiles = map.save();
-      expect(tiles).toEqual([0, 0, 0, 0, 0, 0, 0, 0, 0]);
+      expect(map.save()).toEqual([0, 0, 0, 0, 0, 0, 0, 0, 0]);
     });
   });
 
-  describe("when an argument that isnt between 0 and 1 is passed", () => {
+  describe("when a percent alive that isnt between 0 and 1 is passed", () => {
     it("throws", () => {
       const error = Error("expected a number between 0 and 1");
       expect.assertions(1);
@@ -194,18 +200,11 @@ describe("noise", () => {
     });
   });
 
-  describe("when an percent alive is passed", () => {
+  describe("when a percent alive is passed", () => {
     beforeEach(() => {
       jest.spyOn(Math, "random");
     });
     it("there are the correct number of alive tiles", () => {
-      const countAlives = automata =>
-        automata
-          .save()
-          .filter(
-            item => automata.lifecycle.live.indexOf(automata.tileset[item]) > -1
-          ).length;
-
       expect(countAlives(map.noise(0.5))).toBe(5);
       expect(countAlives(map.noise(0.1))).toBe(1);
       expect(countAlives(map.noise(0.9))).toBe(8);

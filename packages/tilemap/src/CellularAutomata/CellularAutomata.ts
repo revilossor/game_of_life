@@ -63,41 +63,49 @@ export default class CellularAutomata<T> extends Tilemap<T> {
     return this;
   }
 
-  public noise(percentAlive: number = 0.5): CellularAutomata<T> {
-    if (percentAlive < 0 || percentAlive > 1) {
-      throw Error("expected a number between 0 and 1");
-    }
-
+  public noise(percentAlive: number): CellularAutomata<T> {
     const length: number = this.width * this.height;
-    const expectedAlive: number = Math.round(length * percentAlive);
     const source: number[] = [];
 
-    while (source.length < expectedAlive) {
-      source.push(
-        this.tileset.indexOf(
-          this.lifecycle.live[
-            Math.floor(Math.random() * this.lifecycle.live.length)
-          ]
-        )
-      );
+    if (typeof percentAlive === "undefined") {
+      while (source.length < length) {
+        source.push(Math.floor(Math.random() * this.tileset.length));
+      }
+      this.load(source);
+    } else {
+      if (percentAlive < 0 || percentAlive > 1) {
+        throw Error("expected a number between 0 and 1");
+      }
+
+      const expectedAlive: number = Math.round(length * percentAlive);
+
+      while (source.length < expectedAlive) {
+        source.push(
+          this.tileset.indexOf(
+            this.lifecycle.live[
+              Math.floor(Math.random() * this.lifecycle.live.length)
+            ]
+          )
+        );
+      }
+
+      while (source.length < length) {
+        source.push(
+          this.tileset.indexOf(
+            this.lifecycle.dead[
+              Math.floor(Math.random() * this.lifecycle.dead.length)
+            ]
+          )
+        );
+      }
+
+      const shuffledSource: number[] = source
+        .map((item: number): number[] => [Math.random(), item])
+        .sort((a: number[], b: number[]): number => a[0] - b[0])
+        .map((a: number[]): number => a[1]);
+
+      this.load(shuffledSource);
     }
-
-    while (source.length < length) {
-      source.push(
-        this.tileset.indexOf(
-          this.lifecycle.dead[
-            Math.floor(Math.random() * this.lifecycle.dead.length)
-          ]
-        )
-      );
-    }
-
-    const shuffledSource: number[] = source
-      .map((item: number): number[] => [Math.random(), item])
-      .sort((a: number[], b: number[]): number => a[0] - b[0])
-      .map((a: number[]): number => a[1]);
-
-    this.load(shuffledSource);
 
     return this;
   }
