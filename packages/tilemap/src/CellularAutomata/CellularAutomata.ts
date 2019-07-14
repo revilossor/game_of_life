@@ -63,20 +63,42 @@ export default class CellularAutomata<T> extends Tilemap<T> {
     return this;
   }
 
-  public noise(percentAlive: number): CellularAutomata<T> {
-    if (
-      typeof percentAlive !== "undefined" &&
-      (percentAlive < 0 || percentAlive > 1)
-    ) {
+  public noise(percentAlive: number = 0.5): CellularAutomata<T> {
+    if (percentAlive < 0 || percentAlive > 1) {
       throw Error("expected a number between 0 and 1");
     }
 
-    const length = this.width * this.height;
+    const length: number = this.width * this.height;
+    const expectedAlive: number = Math.round(length * percentAlive);
     const source: number[] = [];
-    for (let i = 0; i < length; ++i) {
-      source.push(Math.floor(Math.random() * this.tileset.length));
+
+    while (source.length < expectedAlive) {
+      source.push(
+        this.tileset.indexOf(
+          this.lifecycle.live[
+            Math.floor(Math.random() * this.lifecycle.live.length)
+          ]
+        )
+      );
     }
-    this.load(source);
+
+    while (source.length < length) {
+      source.push(
+        this.tileset.indexOf(
+          this.lifecycle.dead[
+            Math.floor(Math.random() * this.lifecycle.dead.length)
+          ]
+        )
+      );
+    }
+
+    const shuffledSource: number[] = source
+      .map((item: number) => [Math.random(), item])
+      .sort((a: number[], b: number[]) => a[0] - b[0])
+      .map((a: number[]) => a[1]);
+
+    this.load(shuffledSource);
+
     return this;
   }
 }

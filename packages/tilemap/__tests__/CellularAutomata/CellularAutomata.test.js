@@ -168,16 +168,14 @@ describe("generate", () => {
 });
 
 describe("noise", () => {
-  beforeEach(() => {
-    Math.random = jest.fn();
-    Math.floor = jest.fn(() => 0);
-    map.noise();
-  });
-
   describe("when no argument is passed", () => {
+    beforeEach(() => {
+      Math.floor = jest.fn(() => 0);
+      map.noise();
+    });
+
     it("sets each tile to a random index", () => {
       const length = width * height;
-      expect(Math.random).toHaveBeenCalledTimes(length);
       expect(Math.floor).toHaveBeenCalledTimes(length);
       const tiles = map.save();
       expect(tiles).toEqual([0, 0, 0, 0, 0, 0, 0, 0, 0]);
@@ -193,6 +191,24 @@ describe("noise", () => {
       } catch (err) {
         expect(err).toEqual(error);
       }
+    });
+  });
+
+  describe("when an percent alive is passed", () => {
+    beforeEach(() => {
+      jest.spyOn(Math, "random");
+    });
+    it("there are the correct number of alive tiles", () => {
+      const countAlives = automata =>
+        automata
+          .save()
+          .filter(
+            item => automata.lifecycle.live.indexOf(automata.tileset[item]) > -1
+          ).length;
+
+      expect(countAlives(map.noise(0.5))).toBe(5);
+      expect(countAlives(map.noise(0.1))).toBe(1);
+      expect(countAlives(map.noise(0.9))).toBe(8);
     });
   });
 });
