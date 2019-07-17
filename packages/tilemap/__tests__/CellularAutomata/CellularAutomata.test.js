@@ -1,17 +1,23 @@
 const { CellularAutomata, Tilemap } = require("../../src");
-const { Lifecycle } = require("../../src/CellularAutomata");
+const { CellularAutomationModel } = require("../../src/CellularAutomata");
 
 const width = 3;
 const height = 3;
 
 const tileset = ["rock", "paper", "scissors"];
 
-const lifecycle = new Lifecycle(["paper"], ["rock", "scissors"], [3], [2, 3]);
+const model = new CellularAutomationModel(
+  ["paper"],
+  ["rock", "scissors"],
+  [],
+  [3],
+  [2, 3]
+);
 
 let map;
 
 beforeEach(() => {
-  map = new CellularAutomata(width, height, tileset, lifecycle);
+  map = new CellularAutomata(width, height, tileset, model);
 });
 
 it("extends Tilemap", () => {
@@ -20,8 +26,8 @@ it("extends Tilemap", () => {
 
 describe("constructor", () => {
   describe("assigns constructor values", () => {
-    it("lifecycle", () => {
-      expect(map.lifecycle).toBe(lifecycle);
+    it("CellularAutomationModel", () => {
+      expect(map.CellularAutomationModel).toBe(model);
     });
   });
 });
@@ -66,10 +72,10 @@ describe("step", () => {
       width,
       height,
       tiles,
-      new Lifecycle(["alive"], ["dead"], [3], [2, 3])
+      new CellularAutomationModel(["alive"], ["dead"], [], [3], [2, 3])
     );
   });
-  it("updates to the next generation for the lifecycle", () => {
+  it("updates to the next generation for the CellularAutomationModel", () => {
     expect(
       map
         .fromArray([
@@ -151,7 +157,7 @@ describe("step", () => {
       4,
       2,
       tiles,
-      new Lifecycle(["alive"], ["dead"], [3], [2, 3])
+      new CellularAutomationModel(["alive"], ["dead"], [], [3], [2, 3])
     );
 
     expect(
@@ -191,7 +197,10 @@ describe("noise", () => {
     automata
       .save()
       .filter(
-        item => automata.lifecycle.live.indexOf(automata.tileset[item]) > -1
+        item =>
+          automata.CellularAutomationModel.live.indexOf(
+            automata.tileset[item]
+          ) > -1
       ).length;
 
   describe("when no argument is passed", () => {

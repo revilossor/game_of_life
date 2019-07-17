@@ -1,18 +1,23 @@
 import Neighbours from "./Neighbours";
-import Lifecycle from "./Lifecycle";
+import CellularAutomationModel from "./CellularAutomationModel";
 import Tilemap from "../Tilemap";
 
+// TODO can have multiple CellularAutomationModels, CellularAutomationModels can have ignore lists
+// register / deregister CellularAutomationModels - advance them independantly
+
+// Rename - AutomataTilemap
+
 export default class CellularAutomata<T> extends Tilemap<T> {
-  protected lifecycle: Lifecycle<T>;
+  protected model: CellularAutomationModel<T>;
 
   public constructor(
     width: number,
     height: number,
     tileset: T[],
-    lifecycle: Lifecycle<T>
+    model: CellularAutomationModel<T>
   ) {
     super(width, height, tileset);
-    this.lifecycle = lifecycle;
+    this.model = model;
   }
 
   public getNeighbours(x: number, y: number): Neighbours<T> {
@@ -42,8 +47,7 @@ export default class CellularAutomata<T> extends Tilemap<T> {
       }
     );
     const processed: T[] = neighbourTuples.map(
-      (tuple: [T, Neighbours<T>]): T =>
-        this.lifecycle.process(tuple[1], tuple[0])
+      (tuple: [T, Neighbours<T>]): T => this.model.process(tuple[1], tuple[0])
     );
     return this.fromArray(processed);
   }
@@ -55,6 +59,7 @@ export default class CellularAutomata<T> extends Tilemap<T> {
 
   public generate(generations: number): CellularAutomata<T> {
     for (let n: number = generations; n > 0; --n) {
+      // while
       this.step();
     }
     return this;
@@ -79,9 +84,7 @@ export default class CellularAutomata<T> extends Tilemap<T> {
       while (source.length < expectedAlive) {
         source.push(
           this.tileset.indexOf(
-            this.lifecycle.live[
-              Math.floor(Math.random() * this.lifecycle.live.length)
-            ]
+            this.model.live[Math.floor(Math.random() * this.model.live.length)]
           )
         );
       }
@@ -89,9 +92,7 @@ export default class CellularAutomata<T> extends Tilemap<T> {
       while (source.length < length) {
         source.push(
           this.tileset.indexOf(
-            this.lifecycle.dead[
-              Math.floor(Math.random() * this.lifecycle.dead.length)
-            ]
+            this.model.dead[Math.floor(Math.random() * this.model.dead.length)]
           )
         );
       }

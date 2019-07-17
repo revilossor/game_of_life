@@ -1,29 +1,33 @@
-const { Lifecycle } = require("../../src/CellularAutomata");
+const { CellularAutomationModel } = require("../../src/CellularAutomata");
 
-let lifecycle;
+let model;
 
 const live = ["paper"];
 const dead = ["rock", "scissors"];
+const ignore = ["hello"];
 const born = [3];
 const survive = [2, 3];
 
 beforeEach(() => {
-  lifecycle = new Lifecycle(live, dead, born, survive);
+  model = new CellularAutomationModel(live, dead, ignore, born, survive);
 });
 
 describe("constructor", () => {
   describe("assigns properties", () => {
     it("live", () => {
-      expect(lifecycle.live).toEqual(live);
+      expect(model.live).toEqual(live);
     });
     it("dead", () => {
-      expect(lifecycle.dead).toEqual(dead);
+      expect(model.dead).toEqual(dead);
+    });
+    it("ignore", () => {
+      expect(model.ignore).toEqual(ignore);
     });
     it("born", () => {
-      expect(lifecycle.born).toEqual(born);
+      expect(model.born).toEqual(born);
     });
     it("survive", () => {
-      expect(lifecycle.survive).toEqual(survive);
+      expect(model.survive).toEqual(survive);
     });
   });
 });
@@ -34,11 +38,15 @@ describe("computed properties", () => {
   });
 
   it("liveValue", () => {
-    expect(lifecycle.liveValue).toBe(live[0]);
+    expect(model.liveValue).toBe(live[0]);
   });
 
   it("deadValue", () => {
-    expect(lifecycle.deadValue).toBe(dead[0]);
+    expect(model.deadValue).toBe(dead[0]);
+  });
+
+  it("ignoredValue", () => {
+    expect(model.ignoredValue).toBe(ignore[0]);
   });
 });
 
@@ -49,7 +57,7 @@ describe("process", () => {
 
   it("calculates birth correctly, treating null as dead", () => {
     expect(
-      lifecycle.process({
+      model.process({
         topLeft: "paper",
         top: "paper",
         topRight: "paper",
@@ -61,7 +69,7 @@ describe("process", () => {
       })
     ).toBe(live[0]);
     expect(
-      lifecycle.process({
+      model.process({
         topLeft: null,
         top: null,
         topRight: "paper",
@@ -76,7 +84,7 @@ describe("process", () => {
   it("calculates survival correctly", () => {
     // only if currently alive
     expect(
-      lifecycle.process(
+      model.process(
         {
           topLeft: "paper",
           top: "paper",
@@ -91,7 +99,7 @@ describe("process", () => {
       )
     ).toBe(live[0]);
     expect(
-      lifecycle.process(
+      model.process(
         {
           topLeft: null,
           top: null,
@@ -108,7 +116,7 @@ describe("process", () => {
   });
   it("calculates death correctly", () => {
     expect(
-      lifecycle.process({
+      model.process({
         topLeft: "scissors",
         top: "rock",
         topRight: "scissors",
@@ -120,7 +128,7 @@ describe("process", () => {
       })
     ).toBe(dead[0]);
     expect(
-      lifecycle.process({
+      model.process({
         topLeft: "scissors",
         top: "rock",
         topRight: "scissors",
@@ -132,7 +140,7 @@ describe("process", () => {
       })
     ).toBe(dead[0]);
     expect(
-      lifecycle.process({
+      model.process({
         topLeft: "scissors",
         top: "rock",
         topRight: "scissors",
@@ -144,7 +152,7 @@ describe("process", () => {
       })
     ).toBe(dead[0]);
     expect(
-      lifecycle.process({
+      model.process({
         topLeft: "scissors",
         top: "rock",
         topRight: "scissors",
@@ -156,7 +164,7 @@ describe("process", () => {
       })
     ).toBe(dead[0]);
     expect(
-      lifecycle.process({
+      model.process({
         topLeft: "scissors",
         top: "rock",
         topRight: "paper",
@@ -168,7 +176,7 @@ describe("process", () => {
       })
     ).toBe(dead[0]);
     expect(
-      lifecycle.process({
+      model.process({
         topLeft: "scissors",
         top: "paper",
         topRight: "paper",
@@ -180,7 +188,7 @@ describe("process", () => {
       })
     ).toBe(dead[0]);
     expect(
-      lifecycle.process({
+      model.process({
         topLeft: "paper",
         top: "paper",
         topRight: "paper",
@@ -195,7 +203,7 @@ describe("process", () => {
 
   it("doesnt change the value of a persisted state with more than one possible value", () => {
     expect(
-      lifecycle.process(
+      model.process(
         {
           topLeft: "scissors",
           top: "rock",
@@ -210,4 +218,6 @@ describe("process", () => {
       )
     ).toBe(dead[1]);
   });
+
+  // TODO it doesnt process nodes on the ignore list ( but still counts as neighbours )
 });

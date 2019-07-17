@@ -1,2 +1,2 @@
 export { default } from "./CellularAutomata";
-export { default as Lifecycle } from "./Lifecycle";
+export { default as CellularAutomationModel } from "./CellularAutomationModel";

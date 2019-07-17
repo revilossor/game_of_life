@@ -1,9 +1,10 @@
 import Neighbours from "./Neighbours";
 
-export default class Lifecycle<T> {
+export default class CellularAutomationModel<T> {
   public constructor(
     public live: T[],
     public dead: T[],
+    public ignore: T[],
     public born: number[],
     public survive: number[]
   ) {}
@@ -14,6 +15,10 @@ export default class Lifecycle<T> {
 
   public get deadValue(): T {
     return this.dead[Math.floor(Math.random() * this.dead.length)];
+  }
+
+  public get ignoredValue(): T {
+    return this.ignore[Math.floor(Math.random() * this.ignore.length)];
   }
 
   private getLiveNeighbours(neighbours: Neighbours<T>): number {

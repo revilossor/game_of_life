@@ -1,5 +1,6 @@
 import { PointMap } from "revilossor-game-common";
 
+// folder for this
 export default class Tilemap<T> {
   protected tileset: T[];
 
@@ -79,6 +80,7 @@ export default class Tilemap<T> {
   }
 
   public forEachTile(
+    // TODO also values
     callback: (x: number, y: number, index: number) => void
   ): void {
     this.validateDimensions();
@@ -96,7 +98,12 @@ export default class Tilemap<T> {
     return this;
   }
 
+  // TODO setValue, rename load / save to fromIndexes / toIndexes / fromValues / toValues
+  // TODO need a save / load that children can override that also saved / loads tilemap, other models.
+  // func that makes an array a 2d Array
+
   public fromArray(src: T[]): Tilemap<T> {
+    // TODO rename fromArrayValues, do fromArrayIndexes ( thats load i think... )
     this.validateTileValues(src);
     this.forEachTile((x: number, y: number, index: number): void => {
       this.set(x, y, this.tileset.indexOf(src[index]));
@@ -105,6 +112,7 @@ export default class Tilemap<T> {
   }
 
   public toArray(): (T | null)[] {
+    // TODO toArrayValues
     const array = new Array(this.width * this.height).fill(null);
     this.tiles.entries.forEach(([{ x, y }, value]): void => {
       array[y * this.width + x] = this.tileset[value];
@@ -113,6 +121,7 @@ export default class Tilemap<T> {
   }
 
   public to2DArray(): (T | null)[][] {
+    // TODO to t2d array indexes / values
     const array: (T | null)[] = this.toArray();
     const result: (T | null)[][] = [];
     while (array.length > 0) {
@@ -131,6 +140,7 @@ export default class Tilemap<T> {
   }
 
   public load(src: number[]): Tilemap<T> {
+    // TODO from array indexes
     this.validateTileIndexes(src);
     this.forEachTile((x: number, y: number, index: number): void => {
       this.set(x, y, src[index] === null ? 0 : src[index]);
@@ -139,6 +149,7 @@ export default class Tilemap<T> {
   }
 
   public save(): number[] {
+    // TODO to array indexes
     const array = new Array(this.width * this.height).fill(null);
     this.tiles.entries.forEach(([{ x, y }, value]): void => {
       array[y * this.width + x] = value;

@@ -1,12 +1,12 @@
 const { CellularAutomata } = require("../../src");
-const { Lifecycle } = require("../../src/CellularAutomata");
+const { CellularAutomationModel } = require("../../src/CellularAutomata");
 
 const width = 10;
 const height = 10;
 
 const tileset = ["[ ]", "[x]"];
 
-const lifecycle = new Lifecycle(["[x]"], ["[ ]"], [3], [2, 3]);
+const model = new CellularAutomationModel(["[x]"], ["[ ]"], [], [3], [2, 3]);
 
 let map;
 
@@ -17,7 +17,7 @@ source[44] = 1;
 source[55] = 1;
 
 beforeAll(() => {
-  map = new CellularAutomata(width, height, tileset, lifecycle);
+  map = new CellularAutomata(width, height, tileset, model);
   map.load(source);
 });
 
