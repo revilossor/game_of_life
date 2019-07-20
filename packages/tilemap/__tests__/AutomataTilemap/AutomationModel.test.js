@@ -3,7 +3,7 @@ const AutomationModel = require("../../src/AutomataTilemap/AutomationModel")
 
 let model;
 
-const live = ["paper"];
+const live = ["paper", "hello"];
 const dead = ["rock", "scissors"];
 const ignore = ["hello"];
 const born = [3];
@@ -83,7 +83,6 @@ describe("process", () => {
     ).toBe(live[0]);
   });
   it("calculates survival correctly", () => {
-    // only if currently alive
     expect(
       model.process(
         {
@@ -220,5 +219,33 @@ describe("process", () => {
     ).toBe(dead[1]);
   });
 
-  // TODO it doesnt process nodes on the ignore list ( but still counts as neighbours )
+  it("doesnt process nodes on the ignore list (but still counts if alive)", () => {
+    expect(
+      model.process({
+        topLeft: "paper",
+        top: "hello",
+        topRight: "hello",
+        left: "rock",
+        right: "scissors",
+        bottomLeft: "rock",
+        bottom: "scissors",
+        bottomRight: "rock"
+      })
+    ).toBe(live[0]);
+    expect(
+      model.process(
+        {
+          topLeft: null,
+          top: null,
+          topRight: "rock",
+          left: null,
+          right: null,
+          bottomLeft: "scissors",
+          bottom: null,
+          bottomRight: "paper"
+        },
+        "hello"
+      )
+    ).toBe("hello");
+  });
 });

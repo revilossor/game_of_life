@@ -32,6 +32,9 @@ export default class AutomationModel<T> {
   }
 
   public process(neighbours: Neighbours<T>, value: T): T {
+    if (this.ignore.indexOf(value) >= 0) {
+      return value;
+    }
     const lives = this.getLiveNeighbours(neighbours);
     const getLiveIf = (): T => {
       if (typeof value === "undefined") {
