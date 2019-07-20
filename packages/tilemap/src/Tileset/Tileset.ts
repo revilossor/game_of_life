@@ -1,7 +1,7 @@
 export default class Tileset<T> {
   private members: T[];
 
-  constructor(...items: T[]) {
+  public constructor(...items: T[]) {
     this.members = [...items];
   }
 

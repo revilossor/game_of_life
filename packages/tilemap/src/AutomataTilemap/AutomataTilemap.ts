@@ -20,7 +20,9 @@ export default class AutomataTilemap<T> extends Tilemap<T> {
   }
 
   public getNeighbours(x: number, y: number): Neighbours<T> {
-    const getValue: (value?: number) => T | null = (value?: number) => {
+    const getValue: (value?: number) => T | null = (
+      value?: number
+    ): T | null => {
       if (typeof value === "undefined") {
         return null;
       }

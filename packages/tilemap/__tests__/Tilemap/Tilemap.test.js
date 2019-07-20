@@ -6,8 +6,6 @@ const Tileset = require("../../src/Tileset").default;
 const width = 3;
 const height = 3;
 
-const expectedLength = width * height;
-
 const tileset = new Tileset("rock", "paper", "scissors");
 const source = [0, 1, 2, null, null, null, 0, 1, 2];
 
