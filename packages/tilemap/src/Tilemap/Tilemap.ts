@@ -78,8 +78,7 @@ export default class Tilemap<T> {
     }
   }
 
-  public forEachTile(
-    // TODO also values
+  public forEachPosition(
     callback: (x: number, y: number, index: number) => void
   ): void {
     this.validateDimensions();
@@ -109,7 +108,7 @@ export default class Tilemap<T> {
 
   public fromIndexes(src: number[]): Tilemap<T> {
     this.validateTileIndexes(src);
-    this.forEachTile((x: number, y: number, index: number): void => {
+    this.forEachPosition((x: number, y: number, index: number): void => {
       this.setIndex(x, y, src[index] === null ? 0 : src[index]);
     });
     return this;
@@ -125,13 +124,13 @@ export default class Tilemap<T> {
 
   public fromValues(src: T[]): Tilemap<T> {
     this.validateTileValues(src);
-    this.forEachTile((x: number, y: number, index: number): void => {
+    this.forEachPosition((x: number, y: number, index: number): void => {
       this.setIndex(x, y, this.tileset.indexOf(src[index]));
     });
     return this;
   }
 
-  public to2DArray<N>(array: (N | null)[]): (N | null)[][] {
+  protected to2DArray<N>(array: (N | null)[]): (N | null)[][] {
     const result: (N | null)[][] = [];
     while (array.length > 0) {
       result.push(array.splice(0, this.width));

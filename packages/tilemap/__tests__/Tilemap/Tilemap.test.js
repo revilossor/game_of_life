@@ -140,20 +140,20 @@ describe("validateDimensions", () => {
   });
 });
 
-describe("forEachTile", () => {
+describe("forEachPosition", () => {
   it("validates the map dimensions", () => {
     const validateDimensions = jest
       .spyOn(map, "validateDimensions")
       .mockImplementation(() => {});
 
     expect(validateDimensions).not.toHaveBeenCalled();
-    map.forEachTile(() => {});
+    map.forEachPosition(() => {});
     expect(validateDimensions).toHaveBeenCalledTimes(1);
   });
 
-  it("executes the callback once for each tile position, with an index", () => {
+  it("executes the callback once for each tile position, with an index and the value", () => {
     const cb = jest.fn();
-    map.forEachTile(cb);
+    map.forEachPosition(cb);
     expect(cb.mock.calls[0]).toEqual([0, 0, 0]);
     expect(cb.mock.calls[1]).toEqual([1, 0, 1]);
     expect(cb.mock.calls[2]).toEqual([2, 0, 2]);
