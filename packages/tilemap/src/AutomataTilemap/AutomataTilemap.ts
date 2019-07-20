@@ -56,8 +56,8 @@ export default class AutomataTilemap<T> extends Tilemap<T> {
   }
 
   public generate(generations: number): AutomataTilemap<T> {
-    for (let n: number = generations; n > 0; --n) {
-      // TODO while
+    let remainingGenerations: number = generations;
+    while (--remainingGenerations >= 0) {
       this.step();
     }
     return this;
