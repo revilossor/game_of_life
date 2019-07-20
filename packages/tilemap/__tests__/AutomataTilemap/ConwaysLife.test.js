@@ -1,10 +1,11 @@
 const AutomataTilemap = require("../../src/AutomataTilemap").default;
+const Tileset = require("../../src/Tileset").default;
 const { AutomationModel } = require("../../src/AutomataTilemap");
 
 const width = 10;
 const height = 10;
 
-const tileset = ["[ ]", "[x]"];
+const tileset = new Tileset("[ ]", "[x]");
 
 const model = new AutomationModel(["[x]"], ["[ ]"], [], [3], [2, 3]);
 

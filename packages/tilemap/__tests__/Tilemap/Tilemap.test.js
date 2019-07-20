@@ -1,14 +1,17 @@
 const { PointMap } = require("revilossor-game-common");
 
 const Tilemap = require("../../src/Tilemap").default;
+const Tileset = require("../../src/Tileset").default;
 
 const width = 3;
 const height = 3;
 
 const expectedLength = width * height;
 
-const tileset = ["rock", "paper", "scissors"];
+const tileset = new Tileset("rock", "paper", "scissors");
 const source = [0, 1, 2, null, null, null, 0, 1, 2];
+
+beforeEach(() => {});
 
 const x = 1;
 const y = 2;
@@ -64,75 +67,6 @@ describe("validatePoint", () => {
   });
 });
 
-describe("validateTileIndex", () => {
-  const error = Error(
-    `the tile index should be a number between 0 and ${tileset.length}`
-  );
-
-  it("throws if the index isnt a number", () => {
-    expect(() => map.validateTileIndex("poo")).toThrow(error);
-  });
-
-  it("throws if the index is too large or too small", () => {
-    expect(() => map.validateTileIndex(100)).toThrow(error);
-    expect(() => map.validateTileIndex(-1)).toThrow(error);
-    expect(() => map.validateTileIndex()).toThrow(error);
-  });
-
-  it("doesnt throw if the index is correct", () => {
-    expect(() => map.validateTileIndex(0)).not.toThrow();
-    expect(() => map.validateTileIndex(tileset.length - 1)).not.toThrow();
-  });
-});
-
-describe("validateTileIndexes", () => {
-  it("throws if no source array is passed", () => {
-    expect(() => map.validateTileIndexes()).toThrow("expected source array");
-  });
-
-  it("throws if the source array has the wrong length", () => {
-    const error = Error(`expected an array of length ${expectedLength}`);
-    expect(() =>
-      map.validateTileIndexes(new Array(expectedLength - 1))
-    ).toThrow(error);
-    expect(() =>
-      map.validateTileIndexes(new Array(expectedLength + 1))
-    ).toThrow(error);
-  });
-
-  it("throws if any of the indexes are invalid", () => {
-    const error = Error(
-      `expected an array of tile indexes between 0 and ${tileset.length}`
-    );
-    const src = new Array(expectedLength).fill(0);
-    src[0] = 9001;
-    expect(() => map.validateTileIndexes(src)).toThrow(error);
-  });
-});
-
-describe("validateTileValues", () => {
-  it("throws if no source array is passed", () => {
-    expect(() => map.validateTileValues()).toThrow("expected source array");
-  });
-
-  it("throws if the source array has the wrong length", () => {
-    const error = Error(`expected an array of length ${expectedLength}`);
-    expect(() => map.validateTileValues(new Array(expectedLength - 1))).toThrow(
-      error
-    );
-    expect(() => map.validateTileValues(new Array(expectedLength + 1))).toThrow(
-      error
-    );
-  });
-
-  it("throws if any of the values are invalid", () => {
-    const error = Error(`expected an array of items ${tileset}`);
-    const src = new Array(expectedLength).fill(tileset[0]);
-    src[0] = "chainsaw";
-    expect(() => map.validateTileValues(src)).toThrow(error);
-  });
-});
-
 describe("validateDimensions", () => {
   it("throws if no width or height are set", () => {
     map = new Tilemap();
@@ -183,7 +117,7 @@ describe("setIndex", () => {
 
   it("validates the tile index", () => {
     const validateTileIndex = jest
-      .spyOn(map, "validateTileIndex")
+      .spyOn(tileset, "validateTileIndex")
       .mockImplementation(() => {});
 
     expect(validateTileIndex).not.toHaveBeenCalled();
@@ -246,6 +180,7 @@ describe("fromIndexes", () => {
   const sourceArray = [0, 1, 2, 0, 1, 2, 0, 1, 2];
 
   it("validates the source array", () => {
+    // TODO validated in the tileset
     const validateTileIndexes = jest
       .spyOn(map, "validateTileIndexes")
       .mockImplementation(() => {});
@@ -292,8 +227,10 @@ describe("toValues", () => {
   });
 
   it("writes values from the top left to the bottom right", () => {
-    expect(result[0]).toEqual(tileset[topLeftIndex]);
-    expect(result[result.length - 1]).toEqual(tileset[bottomRightIndex]);
+    expect(result[0]).toEqual(tileset.getValue(topLeftIndex));
+    expect(result[result.length - 1]).toEqual(
+      tileset.getValue(bottomRightIndex)
+    );
   });
 
   it("fills in empty positions with null", () => {
@@ -316,6 +253,7 @@ describe("fromValues", () => {
   ];
 
   it("validates the source array", () => {
+    // TODO validates in the tilesrt
     const validateTileValues = jest
       .spyOn(map, "validateTileValues")
       .mockImplementation(() => {});
@@ -407,8 +345,8 @@ describe("to2DValues", () => {
   });
 
   it("sorts values a list of rows", () => {
-    expect(result[0][width - 1]).toEqual(tileset[topRightIndex]);
-    expect(result[height - 1][0]).toEqual(tileset[bottomLeftIndex]);
+    expect(result[0][width - 1]).toEqual(tileset.getValue(topRightIndex));
+    expect(result[height - 1][0]).toEqual(tileset.getValue(bottomLeftIndex));
   });
 
   it("fills in empty positions with null", () => {
@@ -421,8 +359,8 @@ describe("to2DValues", () => {
     map.setIndex(3, 0, topRightIndex);
     map.setIndex(0, 1, bottomLeftIndex);
     result = map.to2DValues();
-    expect(result[0][3]).toEqual(tileset[topRightIndex]);
-    expect(result[1][0]).toEqual(tileset[bottomLeftIndex]);
+    expect(result[0][3]).toEqual(tileset.getValue(topRightIndex));
+    expect(result[1][0]).toEqual(tileset.getValue(bottomLeftIndex));
   });
 });
 

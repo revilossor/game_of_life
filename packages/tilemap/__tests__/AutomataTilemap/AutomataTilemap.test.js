@@ -1,11 +1,12 @@
 const AutomataTilemap = require("../../src/AutomataTilemap").default;
 const Tilemap = require("../../src/Tilemap").default;
+const Tileset = require("../../src/Tileset").default;
 const { AutomationModel } = require("../../src/AutomataTilemap");
 
 const width = 3;
 const height = 3;
 
-const tileset = ["rock", "paper", "scissors"];
+const tileset = new Tileset("rock", "paper", "scissors");
 
 const model = new AutomationModel(
   ["paper"],
@@ -67,7 +68,7 @@ describe("getNeighbours", () => {
 });
 
 describe("step", () => {
-  const tiles = ["alive", "dead"];
+  const tiles = new Tileset("alive", "dead");
   beforeEach(() => {
     map = new AutomataTilemap(
       width,
@@ -197,8 +198,10 @@ describe("noise", () => {
   const countAlives = automata =>
     automata
       .save()
-      .filter(item => automata.model.live.indexOf(automata.tileset[item]) > -1)
-      .length;
+      .filter(
+        item =>
+          automata.model.live.indexOf(automata.tileset.getValue(item)) > -1
+      ).length;
 
   describe("when no argument is passed", () => {
     beforeEach(() => {

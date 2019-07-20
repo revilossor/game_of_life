@@ -1,6 +1,7 @@
 import Neighbours from "./Neighbours";
 import AutomationModel from "./AutomationModel";
 import Tilemap from "../Tilemap";
+import Tileset from "../Tileset";
 
 // TODO can have multiple AutomationModels, AutomationModels can have ignore lists
 // register / deregister AutomationModels - advance them independantly
@@ -11,7 +12,7 @@ export default class AutomataTilemap<T> extends Tilemap<T> {
   public constructor(
     width: number,
     height: number,
-    tileset: T[],
+    tileset: Tileset<T>,
     model: AutomationModel<T>
   ) {
     super(width, height, tileset);
@@ -19,18 +20,30 @@ export default class AutomataTilemap<T> extends Tilemap<T> {
   }
 
   public getNeighbours(x: number, y: number): Neighbours<T> {
-    function nullify(value?: T): T | null {
-      return typeof value === "undefined" ? null : value;
-    }
+    const getValue: (value?: number) => T | null = (value?: number) => {
+      if (typeof value === "undefined") {
+        return null;
+      }
+      try {
+        const item: T = this.tileset.getValue(value);
+        return item;
+      } catch (error) {
+        if (error.message.match(/^the tile index should be a number between/)) {
+          return null;
+        }
+        throw error;
+      }
+    };
+
     return {
-      topLeft: nullify(this.tileset[this.tiles.get({ x: x - 1, y: y - 1 })]),
-      top: nullify(this.tileset[this.tiles.get({ x, y: y - 1 })]),
-      topRight: nullify(this.tileset[this.tiles.get({ x: x + 1, y: y - 1 })]),
-      left: nullify(this.tileset[this.tiles.get({ x: x - 1, y })]),
-      right: nullify(this.tileset[this.tiles.get({ x: x + 1, y })]),
-      bottomLeft: nullify(this.tileset[this.tiles.get({ x: x - 1, y: y + 1 })]),
-      bottom: nullify(this.tileset[this.tiles.get({ x, y: y + 1 })]),
-      bottomRight: nullify(this.tileset[this.tiles.get({ x: x + 1, y: y + 1 })])
+      topLeft: getValue(this.tiles.get({ x: x - 1, y: y - 1 })),
+      top: getValue(this.tiles.get({ x, y: y - 1 })),
+      topRight: getValue(this.tiles.get({ x: x + 1, y: y - 1 })),
+      left: getValue(this.tiles.get({ x: x - 1, y })),
+      right: getValue(this.tiles.get({ x: x + 1, y })),
+      bottomLeft: getValue(this.tiles.get({ x: x - 1, y: y + 1 })),
+      bottom: getValue(this.tiles.get({ x, y: y + 1 })),
+      bottomRight: getValue(this.tiles.get({ x: x + 1, y: y + 1 }))
     };
   }
 
@@ -39,7 +52,7 @@ export default class AutomataTilemap<T> extends Tilemap<T> {
     const neighbourTuples: [T, Neighbours<T>][] = current.map(
       (item: T | null, index: number): [T, Neighbours<T>] => {
         return [
-          item || this.tileset[0],
+          item || this.tileset.getValue(0),
           this.getNeighbours(index % this.width, Math.floor(index / this.width))
         ];
       }
@@ -81,7 +94,7 @@ export default class AutomataTilemap<T> extends Tilemap<T> {
 
       while (source.length < expectedAlive) {
         source.push(
-          this.tileset.indexOf(
+          this.tileset.getIndex(
             this.model.live[Math.floor(Math.random() * this.model.live.length)]
           )
         );
@@ -89,7 +102,7 @@ export default class AutomataTilemap<T> extends Tilemap<T> {
 
       while (source.length < length) {
         source.push(
-          this.tileset.indexOf(
+          this.tileset.getIndex(
             this.model.dead[Math.floor(Math.random() * this.model.dead.length)]
           )
         );

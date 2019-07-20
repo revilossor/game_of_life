@@ -1,7 +1,8 @@
 import { PointMap } from "revilossor-game-common";
+import Tileset from "../Tileset";
 
 export default class Tilemap<T> {
-  protected tileset: T[];
+  protected tileset: Tileset<T>;
 
   protected tiles: PointMap<number>;
 
@@ -9,7 +10,7 @@ export default class Tilemap<T> {
 
   public height: number;
 
-  public constructor(width: number, height: number, tileset: T[]) {
+  public constructor(width: number, height: number, tileset: Tileset<T>) {
     this.width = width;
     this.height = height;
     this.tiles = new PointMap<number>();
@@ -17,6 +18,7 @@ export default class Tilemap<T> {
   }
 
   protected validateNumericField(
+    // TODO this is in Tileset too
     value: number,
     max: number,
     field: string
@@ -31,42 +33,20 @@ export default class Tilemap<T> {
     this.validateNumericField(y, this.height, "y coordinate");
   }
 
-  protected validateTileIndex(index: number): void {
-    this.validateNumericField(index, this.tileset.length, "tile index");
-  }
-
   protected validateTileIndexes(src: number[]): void {
-    if (typeof src === "undefined") {
-      throw Error("expected source array");
-    }
+    this.tileset.validateTileIndexes(src);
     const expectedLength = this.width * this.height;
     if (src.length !== expectedLength) {
       throw Error(`expected an array of length ${expectedLength}`);
     }
-    src.forEach((index: number): void => {
-      try {
-        this.validateTileIndex(index);
-      } catch (err) {
-        throw Error(
-          `expected an array of tile indexes between 0 and ${this.tileset.length}`
-        );
-      }
-    });
   }
 
   protected validateTileValues(src: T[]): void {
-    if (typeof src === "undefined") {
-      throw Error("expected source array");
-    }
+    this.tileset.validateTileValues(src);
     const expectedLength = this.width * this.height;
     if (src.length !== expectedLength) {
       throw Error(`expected an array of length ${expectedLength}`);
     }
-    src.forEach((value: T): void => {
-      if (this.tileset.indexOf(value) === -1) {
-        throw Error(`expected an array of items ${this.tileset}`);
-      }
-    });
   }
 
   protected validateDimensions(): void {
@@ -91,7 +71,7 @@ export default class Tilemap<T> {
 
   public setIndex(x: number, y: number, tileIndex: number): Tilemap<T> {
     this.validatePoint(x, y);
-    this.validateTileIndex(tileIndex);
+    this.tileset.validateTileIndex(tileIndex);
     this.tiles.set({ x, y }, tileIndex);
     return this;
   }
@@ -117,7 +97,7 @@ export default class Tilemap<T> {
   public toValues(): (T | null)[] {
     const array: (T | null)[] = new Array(this.width * this.height).fill(null);
     this.tiles.entries.forEach(([{ x, y }, value]): void => {
-      array[y * this.width + x] = this.tileset[value];
+      array[y * this.width + x] = this.tileset.getValue(value);
     });
     return array;
   }
@@ -125,7 +105,7 @@ export default class Tilemap<T> {
   public fromValues(src: T[]): Tilemap<T> {
     this.validateTileValues(src);
     this.forEachPosition((x: number, y: number, index: number): void => {
-      this.setIndex(x, y, this.tileset.indexOf(src[index]));
+      this.setIndex(x, y, this.tileset.getIndex(src[index]));
     });
     return this;
   }
