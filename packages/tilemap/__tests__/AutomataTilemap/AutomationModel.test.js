@@ -1,4 +1,4 @@
-const CellularAutomationModel = require("../../src/CellularAutomata/CellularAutomationModel")
+const AutomationModel = require("../../src/AutomataTilemap/AutomationModel")
   .default;
 
 let model;
@@ -10,7 +10,7 @@ const born = [3];
 const survive = [2, 3];
 
 beforeEach(() => {
-  model = new CellularAutomationModel(live, dead, ignore, born, survive);
+  model = new AutomationModel(live, dead, ignore, born, survive);
 });
 
 describe("constructor", () => {

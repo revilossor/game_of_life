@@ -1,13 +1,13 @@
-const CellularAutomata = require("../../src/CellularAutomata").default;
+const AutomataTilemap = require("../../src/AutomataTilemap").default;
 const Tilemap = require("../../src/Tilemap").default;
-const { CellularAutomationModel } = require("../../src/CellularAutomata");
+const { AutomationModel } = require("../../src/AutomataTilemap");
 
 const width = 3;
 const height = 3;
 
 const tileset = ["rock", "paper", "scissors"];
 
-const model = new CellularAutomationModel(
+const model = new AutomationModel(
   ["paper"],
   ["rock", "scissors"],
   [],
@@ -18,7 +18,7 @@ const model = new CellularAutomationModel(
 let map;
 
 beforeEach(() => {
-  map = new CellularAutomata(width, height, tileset, model);
+  map = new AutomataTilemap(width, height, tileset, model);
 });
 
 it("extends Tilemap", () => {
@@ -27,7 +27,7 @@ it("extends Tilemap", () => {
 
 describe("constructor", () => {
   describe("assigns constructor values", () => {
-    it("CellularAutomationModel", () => {
+    it("AutomationModel", () => {
       expect(map.model).toBe(model);
     });
   });
@@ -69,14 +69,14 @@ describe("getNeighbours", () => {
 describe("step", () => {
   const tiles = ["alive", "dead"];
   beforeEach(() => {
-    map = new CellularAutomata(
+    map = new AutomataTilemap(
       width,
       height,
       tiles,
-      new CellularAutomationModel(["alive"], ["dead"], [], [3], [2, 3])
+      new AutomationModel(["alive"], ["dead"], [], [3], [2, 3])
     );
   });
-  it("updates to the next generation for the CellularAutomationModel", () => {
+  it("updates to the next generation for the AutomationModel", () => {
     expect(
       map
         .fromValues([
@@ -154,11 +154,11 @@ describe("step", () => {
   });
 
   it("works if width and height arent the same", () => {
-    map = new CellularAutomata(
+    map = new AutomataTilemap(
       4,
       2,
       tiles,
-      new CellularAutomationModel(["alive"], ["dead"], [], [3], [2, 3])
+      new AutomationModel(["alive"], ["dead"], [], [3], [2, 3])
     );
 
     expect(
@@ -174,7 +174,7 @@ describe("step", () => {
 
   it("is chainable", () => {
     const returned = map.step();
-    expect(returned).toBeInstanceOf(CellularAutomata);
+    expect(returned).toBeInstanceOf(AutomataTilemap);
   });
 });
 
@@ -189,7 +189,7 @@ describe("generate", () => {
 
   it("is chainable", () => {
     const returned = map.generate(1);
-    expect(returned).toBeInstanceOf(CellularAutomata);
+    expect(returned).toBeInstanceOf(AutomataTilemap);
   });
 });
 

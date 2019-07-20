@@ -1,20 +1,18 @@
 import Neighbours from "./Neighbours";
-import CellularAutomationModel from "./CellularAutomationModel";
+import AutomationModel from "./AutomationModel";
 import Tilemap from "../Tilemap";
 
-// TODO can have multiple CellularAutomationModels, CellularAutomationModels can have ignore lists
-// register / deregister CellularAutomationModels - advance them independantly
+// TODO can have multiple AutomationModels, AutomationModels can have ignore lists
+// register / deregister AutomationModels - advance them independantly
 
-// Rename - AutomataTilemap
-
-export default class CellularAutomata<T> extends Tilemap<T> {
-  protected model: CellularAutomationModel<T>;
+export default class AutomataTilemap<T> extends Tilemap<T> {
+  protected model: AutomationModel<T>;
 
   public constructor(
     width: number,
     height: number,
     tileset: T[],
-    model: CellularAutomationModel<T>
+    model: AutomationModel<T>
   ) {
     super(width, height, tileset);
     this.model = model;
@@ -36,7 +34,7 @@ export default class CellularAutomata<T> extends Tilemap<T> {
     };
   }
 
-  private step(): CellularAutomata<T> {
+  private step(): AutomataTilemap<T> {
     const current: (T | null)[] = this.toValues();
     const neighbourTuples: [T, Neighbours<T>][] = current.map(
       (item: T | null, index: number): [T, Neighbours<T>] => {
@@ -52,12 +50,12 @@ export default class CellularAutomata<T> extends Tilemap<T> {
     return this.fromValues(processed);
   }
 
-  public fromValues(src: T[]): CellularAutomata<T> {
+  public fromValues(src: T[]): AutomataTilemap<T> {
     super.fromValues(src);
     return this;
   }
 
-  public generate(generations: number): CellularAutomata<T> {
+  public generate(generations: number): AutomataTilemap<T> {
     for (let n: number = generations; n > 0; --n) {
       // TODO while
       this.step();
@@ -65,7 +63,7 @@ export default class CellularAutomata<T> extends Tilemap<T> {
     return this;
   }
 
-  public noise(percentAlive: number): CellularAutomata<T> {
+  public noise(percentAlive: number): AutomataTilemap<T> {
     const length: number = this.width * this.height;
     const source: number[] = [];
 

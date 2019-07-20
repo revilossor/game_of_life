@@ -1,15 +1,13 @@
 const index = require("../src/index");
 
-const CellularAutomata = require("../src/CellularAutomata");
+const AutomataTilemap = require("../src/AutomataTilemap");
 
-it("exports a CellularAutomata", () => {
+it("exports a AutomataTilemap", () => {
   expect(index.default).toBeDefined();
-  expect(index.default).toEqual(CellularAutomata.default);
+  expect(index.default).toEqual(AutomataTilemap.default);
 });
 
-it("exports a CellularAutomataModel", () => {
-  expect(index.CellularAutomationModel).toBeDefined();
-  expect(index.CellularAutomationModel).toEqual(
-    CellularAutomata.CellularAutomationModel
-  );
+it("exports a AutomataTilemapModel", () => {
+  expect(index.AutomationModel).toBeDefined();
+  expect(index.AutomationModel).toEqual(AutomataTilemap.AutomationModel);
 });

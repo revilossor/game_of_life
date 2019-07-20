@@ -1,6 +1,6 @@
 import Neighbours from "./Neighbours";
 
-export default class CellularAutomationModel<T> {
+export default class AutomationModel<T> {
   public constructor(
     public live: T[],
     public dead: T[],

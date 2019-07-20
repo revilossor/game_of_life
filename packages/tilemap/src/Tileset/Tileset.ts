@@ -8,4 +8,4 @@
 // get random tile index / value
 // array functions...
 
-// call CellularAutomationModel something else - automata model or something. automata / path models separate from tileset
+// call AutomationModel something else - automata model or something. automata / path models separate from tileset

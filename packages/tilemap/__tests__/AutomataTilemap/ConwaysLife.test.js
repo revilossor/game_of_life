@@ -1,12 +1,12 @@
-const CellularAutomata = require("../../src/CellularAutomata").default;
-const { CellularAutomationModel } = require("../../src/CellularAutomata");
+const AutomataTilemap = require("../../src/AutomataTilemap").default;
+const { AutomationModel } = require("../../src/AutomataTilemap");
 
 const width = 10;
 const height = 10;
 
 const tileset = ["[ ]", "[x]"];
 
-const model = new CellularAutomationModel(["[x]"], ["[ ]"], [], [3], [2, 3]);
+const model = new AutomationModel(["[x]"], ["[ ]"], [], [3], [2, 3]);
 
 let map;
 
@@ -17,7 +17,7 @@ source[44] = 1;
 source[55] = 1;
 
 beforeAll(() => {
-  map = new CellularAutomata(width, height, tileset, model);
+  map = new AutomataTilemap(width, height, tileset, model);
   map.load(source);
 });
 
