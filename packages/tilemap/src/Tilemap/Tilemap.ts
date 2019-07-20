@@ -18,7 +18,6 @@ export default class Tilemap<T> {
   }
 
   protected validateNumericField(
-    // TODO this is in Tileset too
     value: number,
     max: number,
     field: string
