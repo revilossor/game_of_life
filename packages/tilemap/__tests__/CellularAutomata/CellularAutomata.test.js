@@ -79,7 +79,7 @@ describe("step", () => {
   it("updates to the next generation for the CellularAutomationModel", () => {
     expect(
       map
-        .fromArray([
+        .fromValues([
           "dead",
           "dead",
           "dead",
@@ -91,7 +91,7 @@ describe("step", () => {
           "dead"
         ])
         .step()
-        .to2DArray()
+        .to2DValues()
     ).toEqual([
       ["dead", "dead", "dead"],
       ["dead", "dead", "dead"],
@@ -100,7 +100,7 @@ describe("step", () => {
 
     expect(
       map
-        .fromArray([
+        .fromValues([
           "alive",
           "dead",
           "alive",
@@ -112,7 +112,7 @@ describe("step", () => {
           "alive"
         ])
         .step()
-        .toArray()
+        .toValues()
     ).toEqual([
       "dead",
       "alive",
@@ -127,7 +127,7 @@ describe("step", () => {
 
     expect(
       map
-        .fromArray([
+        .fromValues([
           "alive",
           "alive",
           "dead",
@@ -139,7 +139,7 @@ describe("step", () => {
           "dead"
         ])
         .step()
-        .toArray()
+        .toValues()
     ).toEqual([
       "alive",
       "alive",
@@ -165,7 +165,7 @@ describe("step", () => {
       map
         .load([0, 1, 0, 1, 1, 0, 1, 0])
         .step()
-        .to2DArray()
+        .to2DValues()
     ).toEqual([
       ["dead", "alive", "alive", "dead"],
       ["dead", "alive", "alive", "dead"]

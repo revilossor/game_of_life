@@ -90,69 +90,81 @@ export default class Tilemap<T> {
     }
   }
 
-  public set(x: number, y: number, tileIndex: number): Tilemap<T> {
+  public setIndex(x: number, y: number, tileIndex: number): Tilemap<T> {
     this.validatePoint(x, y);
     this.validateTileIndex(tileIndex);
     this.tiles.set({ x, y }, tileIndex);
     return this;
   }
 
-  // TODO setValue, rename load / save to fromIndexes / toIndexes / fromValues / toValues
-  // TODO need a save / load that children can override that also saved / loads tilemap, other models.
-  // func that makes an array a 2d Array
+  public toIndexes(): (number | null)[] {
+    const array: (number | null)[] = new Array(this.width * this.height).fill(
+      null
+    );
+    this.tiles.entries.forEach(([{ x, y }, value]): void => {
+      array[y * this.width + x] = value;
+    });
+    return array;
+  }
 
-  public fromArray(src: T[]): Tilemap<T> {
-    // TODO rename fromArrayValues, do fromArrayIndexes ( thats load i think... )
-    this.validateTileValues(src);
+  public fromIndexes(src: number[]): Tilemap<T> {
+    this.validateTileIndexes(src);
     this.forEachTile((x: number, y: number, index: number): void => {
-      this.set(x, y, this.tileset.indexOf(src[index]));
+      this.setIndex(x, y, src[index] === null ? 0 : src[index]);
     });
     return this;
   }
 
-  public toArray(): (T | null)[] {
-    // TODO toArrayValues
-    const array = new Array(this.width * this.height).fill(null);
+  public toValues(): (T | null)[] {
+    const array: (T | null)[] = new Array(this.width * this.height).fill(null);
     this.tiles.entries.forEach(([{ x, y }, value]): void => {
       array[y * this.width + x] = this.tileset[value];
     });
     return array;
   }
 
-  public to2DArray(): (T | null)[][] {
-    // TODO to t2d array indexes / values
-    const array: (T | null)[] = this.toArray();
-    const result: (T | null)[][] = [];
+  public fromValues(src: T[]): Tilemap<T> {
+    this.validateTileValues(src);
+    this.forEachTile((x: number, y: number, index: number): void => {
+      this.setIndex(x, y, this.tileset.indexOf(src[index]));
+    });
+    return this;
+  }
+
+  public to2DArray<N>(array: (N | null)[]): (N | null)[][] {
+    const result: (N | null)[][] = [];
     while (array.length > 0) {
       result.push(array.splice(0, this.width));
     }
     return result;
   }
 
+  public to2DIndexes(): (number | null)[][] {
+    return this.to2DArray(this.toIndexes());
+  }
+
+  public to2DValues(): (T | null)[][] {
+    return this.to2DArray(this.toValues());
+  }
+
+  public save(): number[] {
+    const result: (number | null)[] = this.toIndexes();
+    return result.map((item: number | null): number =>
+      item === null ? -1 : item
+    );
+  }
+
+  public load(src: number[]): Tilemap<T> {
+    this.fromIndexes(src);
+    return this;
+  }
+
   public toString(delimeter: string = ""): string {
-    const tiles: (T | null)[][] = this.to2DArray();
+    const tiles: (T | null)[][] = this.to2DValues();
     let output = `\n`;
     tiles.forEach((row: (T | null)[]): void => {
       output += `${row.join(delimeter)}\n`;
     });
     return output;
-  }
-
-  public load(src: number[]): Tilemap<T> {
-    // TODO from array indexes
-    this.validateTileIndexes(src);
-    this.forEachTile((x: number, y: number, index: number): void => {
-      this.set(x, y, src[index] === null ? 0 : src[index]);
-    });
-    return this;
-  }
-
-  public save(): number[] {
-    // TODO to array indexes
-    const array = new Array(this.width * this.height).fill(null);
-    this.tiles.entries.forEach(([{ x, y }, value]): void => {
-      array[y * this.width + x] = value;
-    });
-    return array;
   }
 }

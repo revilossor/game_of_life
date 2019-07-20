@@ -37,7 +37,7 @@ export default class CellularAutomata<T> extends Tilemap<T> {
   }
 
   private step(): CellularAutomata<T> {
-    const current: (T | null)[] = this.toArray();
+    const current: (T | null)[] = this.toValues();
     const neighbourTuples: [T, Neighbours<T>][] = current.map(
       (item: T | null, index: number): [T, Neighbours<T>] => {
         return [
@@ -49,17 +49,17 @@ export default class CellularAutomata<T> extends Tilemap<T> {
     const processed: T[] = neighbourTuples.map(
       (tuple: [T, Neighbours<T>]): T => this.model.process(tuple[1], tuple[0])
     );
-    return this.fromArray(processed);
+    return this.fromValues(processed);
   }
 
-  public fromArray(src: T[]): CellularAutomata<T> {
-    super.fromArray(src);
+  public fromValues(src: T[]): CellularAutomata<T> {
+    super.fromValues(src);
     return this;
   }
 
   public generate(generations: number): CellularAutomata<T> {
     for (let n: number = generations; n > 0; --n) {
-      // while
+      // TODO while
       this.step();
     }
     return this;
