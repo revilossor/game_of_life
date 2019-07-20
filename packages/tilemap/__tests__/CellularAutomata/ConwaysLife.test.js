@@ -1,4 +1,4 @@
-const { CellularAutomata } = require("../../src");
+const CellularAutomata = require("../../src/CellularAutomata").default;
 const { CellularAutomationModel } = require("../../src/CellularAutomata");
 
 const width = 10;

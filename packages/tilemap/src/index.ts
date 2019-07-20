@@ -1,5 +1,2 @@
-export { default as Tilemap } from "./Tilemap";
-export {
-  CellularAutomationModel,
-  default as CellularAutomata
-} from "./CellularAutomata";
+export { default } from "./CellularAutomata";
+export { CellularAutomationModel } from "./CellularAutomata";

@@ -1,4 +1,5 @@
-const { CellularAutomationModel } = require("../../src/CellularAutomata");
+const CellularAutomationModel = require("../../src/CellularAutomata/CellularAutomationModel")
+  .default;
 
 let model;
 

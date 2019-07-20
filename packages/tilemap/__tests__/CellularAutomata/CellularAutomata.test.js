@@ -1,4 +1,5 @@
-const { CellularAutomata, Tilemap } = require("../../src");
+const CellularAutomata = require("../../src/CellularAutomata").default;
+const Tilemap = require("../../src/Tilemap").default;
 const { CellularAutomationModel } = require("../../src/CellularAutomata");
 
 const width = 3;
@@ -27,7 +28,7 @@ it("extends Tilemap", () => {
 describe("constructor", () => {
   describe("assigns constructor values", () => {
     it("CellularAutomationModel", () => {
-      expect(map.CellularAutomationModel).toBe(model);
+      expect(map.model).toBe(model);
     });
   });
 });
@@ -196,12 +197,8 @@ describe("noise", () => {
   const countAlives = automata =>
     automata
       .save()
-      .filter(
-        item =>
-          automata.CellularAutomationModel.live.indexOf(
-            automata.tileset[item]
-          ) > -1
-      ).length;
+      .filter(item => automata.model.live.indexOf(automata.tileset[item]) > -1)
+      .length;
 
   describe("when no argument is passed", () => {
     beforeEach(() => {
